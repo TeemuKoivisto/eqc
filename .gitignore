@@ -1,0 +1,8 @@
+# npm package folder
+node_modules/
+
+# gedit files
+*~
+
+# npm debug log
+npm-debug.log
