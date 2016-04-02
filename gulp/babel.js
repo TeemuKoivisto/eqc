@@ -2,7 +2,7 @@ const gulp = require("gulp"),
   babel = require("gulp-babel");
 
 gulp.task("babel", () =>
-  gulp.src("dist/eqc.js")
+  gulp.src("src/**/*.js")
   .pipe(babel({
     presets: ["es2015"]
   }))
