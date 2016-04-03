@@ -1,7 +1,7 @@
 {
-  "name": "equation-calculator",
+  "name": "eqc",
   "version": "1.0.0",
-  "description": "calculator for solving latex expressions",
+  "description": "equation calculator for solving latex expressions",
   "main": "index.js",
   "engines": {
     "node": "5.9"
@@ -9,12 +9,13 @@
   "scripts": {
     "lint": "eslint src/ test/ gulp/",
     "start": "node index.js",
-    "nodemon": "gulp nodemon",
+    "build": "gulp build",
+    "build:watch": "gulp watch",
     "test": "mocha --compilers js:babel-core/register test/**/*.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TeemuKoivisto/equation-calculator.git"
+    "url": "git+https://github.com/TeemuKoivisto/eqc.git"
   },
   "author": "TeemuKoivisto",
   "license": "ISC",
