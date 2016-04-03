@@ -1,6 +1,6 @@
-MathComponents.factory('MathTerm', function(MathObject, Orderer, Logger, IDG) {
+MathComponents.factory("MathTerm", function(MathObject, Orderer, Logger, IDG) {
   var term = function Term(variable, value, exponent) {
-    // inherits MathObject's methods and variables
+    // inherits MathObject"s methods and variables
     this.id = IDG.nextId();
     this.type = "Term";
 

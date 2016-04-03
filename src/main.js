@@ -7,28 +7,33 @@ import LatexParser from "./parsing/LatexParser";
 import IDG from "./utility_services/IDG";
 import Orderer from "./utility_services/Orderer";
 
+/*
+ * Instance of Logmon used for logging
+ * And logging is needed, trust me
+ */
+// window.Logmon.createOpt("Logcal", false, true);
+window.Logmon.createOpt("Logcal", true, true);
+
 window.eqc = {
   Calculator: {
 
   },
   MathComponents: {
     Basic: {
-      MathTerm: MathTerm,
-      MathOperation: MathOperation,
+      MathTerm,
+      MathOperation,
     },
-    MathObject: MathObject,
+    MathObject,
   },
   Parsing: {
-    LatexParser: LatexParser,
+    LatexParser,
   },
   UtilityServices: {
-    IDG: IDG,
-    Orderer: Orderer,
-    Penis: "afhh"
+    IDG,
+    Orderer,
+    Penis: "afhh",
   }
 };
 
-
-window.eqc.MathTerm = new MathTerm("x", 3.5, "");
-
-window.eqc.Parser = new LatexParser();
+const parser = new LatexParser();
+window.eqc.Parser = parser;

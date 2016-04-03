@@ -1,4 +1,4 @@
-MathComponents.factory('MathOperation', function(MathObject, Orderer, Logger, IDG) {
+MathComponents.factory("MathOperation", function(MathObject, Orderer, Logger, IDG) {
   var operation = function Operation(factorone, type, factortwo) {
     this.id = IDG.nextId();
 
@@ -6,10 +6,10 @@ MathComponents.factory('MathOperation', function(MathObject, Orderer, Logger, ID
     this.type = "Operation";
 
     this.firstfactor = factorone;
-    this.operation = type === '(' ? '*' : type;
+    this.operation = type === "(" ? "*" : type;
     this.secondfactor = factortwo;
     this.reduced = false;
-    this.isfraction = this.operation === '/';
+    this.isfraction = this.operation === "/";
     this.minussign = false;
 
     this.parent = null;
@@ -25,7 +25,7 @@ MathComponents.factory('MathOperation', function(MathObject, Orderer, Logger, ID
     }
 
     this.setOrder = function(order) {
-      // console.log('ordering op ' + order);
+      // console.log("ordering op " + order);
       order++;
       this.order = order;
       Orderer.registerComponent(order, "Operation");
@@ -100,7 +100,7 @@ MathComponents.factory('MathOperation', function(MathObject, Orderer, Logger, ID
 
     this.toOrder = function() {
       var latex = "" + this.order + "o\\left[";
-      if (this.operation === '*') {
+      if (this.operation === "*") {
         latex += this.firstfactor.toOrder() + "\\cdot " + this.secondfactor.toOrder();
       } else {
         latex += "\\frac{" + this.firstfactor.toOrder() + "}{" + this.secondfactor.toOrder() + "}";
@@ -116,9 +116,9 @@ MathComponents.factory('MathOperation', function(MathObject, Orderer, Logger, ID
 
     this.toLatex = function() {
       var latex = this.minussign ? "-" : "";
-      if (this.operation === '*') {
+      if (this.operation === "*") {
         latex += this.firstfactor.toLatex() + "\\cdot " + this.secondfactor.toLatex();
-        //            } else if (this.operation === '(') {
+        //            } else if (this.operation === "(") {
         //                // luultavasti tarkoittaa lausekkeita, jolloin lausekkeen toLatex palauttaa sulut
         ////                return this.firstfactor.toLatex() + "\\left(" + this.secondfactor.toLatex();
         //                return this.firstfactor.toLatex() + this.secondfactor.toLatex();

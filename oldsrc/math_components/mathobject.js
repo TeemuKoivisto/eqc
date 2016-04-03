@@ -1,6 +1,6 @@
-var MathComponents = angular.module('MathComponents', []);
+var MathComponents = angular.module("MathComponents", []);
 
-MathComponents.factory('MathObject', function(IDG) {
+MathComponents.factory("MathObject", function(IDG) {
   var mathobject = function MathObject() {
     this.type = "uninitiliazed MathObject";
     this.test = "teststring from mathobject";
@@ -17,7 +17,7 @@ MathComponents.factory('MathObject', function(IDG) {
     };
 
     var throwError = function(functionName) {
-      throw (this.type + " hasn't implemented " + functionName + " yet");
+      throw (this.type + " hasn"t implemented " + functionName + " yet");
     };
 
     // here are all the common methods between math objects
@@ -28,7 +28,7 @@ MathComponents.factory('MathObject', function(IDG) {
       this.exponent = exponent;
     };
     this.returnContentList = function() {
-      // returns MathObject's content in a list of MathObjects
+      // returns MathObject"s content in a list of MathObjects
       throwError("returnContentList");
       return MathObjectList;
     };

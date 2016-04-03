@@ -10,10 +10,10 @@ const livereload = require("gulp-livereload");
 gulp.task("build", () => {
   return browserify({
       entries: "./src/main.js",
-      debug: true
+      debug: true,
     })
     .transform("babelify", {
-      presets: ["es2015"]
+      presets: ["es2015"],
     })
     .bundle()
     .pipe(source("eqc.min.js"))

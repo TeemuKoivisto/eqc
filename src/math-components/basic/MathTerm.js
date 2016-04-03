@@ -8,12 +8,6 @@ export default class MathTerm extends MathObject {
     this.value = value;
     // this.value = new Big(value);
     this.exponent = exponent;
-    this.minussign = false;
-
-    this.parent = null;
-
-    this.isComplex = false;
-    this.complexValue = null; // MathTerm??
   }
 
   getValue() {
