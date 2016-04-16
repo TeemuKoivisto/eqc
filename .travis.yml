@@ -1,0 +1,5 @@
+language: node_js
+script:
+  - npm --silent run lint
+  - npm --silent test
+  - istanbul cover node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register --recursive && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

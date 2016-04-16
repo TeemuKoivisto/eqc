@@ -11,10 +11,12 @@ import Orderer from "./utility_services/Orderer";
  * Instance of Logmon used for logging
  * And logging is needed, trust me
  */
-// window.Logmon.createOpt("Logcal", false, true);
-window.Logmon.createOpt("Logcal", true, true);
 
-window.eqc = {
+import Logmon from "./utility_services/Logmon";
+
+Logmon.createLoggerWithOptions("Logcal", false, true);
+
+let eqc = {
   Calculator: {
 
   },
@@ -36,4 +38,6 @@ window.eqc = {
 };
 
 const parser = new LatexParser();
-window.eqc.Parser = parser;
+eqc.Parser = parser;
+
+module.exports = eqc;

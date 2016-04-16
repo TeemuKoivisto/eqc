@@ -1,8 +1,10 @@
-const wrench = require("wrench");
+const fs = require("fs");
 
-wrench.readdirSyncRecursive("./gulp")
+fs
+.readdirSync("./gulp")
 .filter( file => {
-  return (/\.(js|coffee)$/i).test(file);
-}).map( file => {
+  return (/\.(js)$/i).test(file);
+})
+.map( file => {
   require("./gulp/" + file);
 });

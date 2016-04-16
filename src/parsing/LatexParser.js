@@ -20,7 +20,7 @@ export default class LatexParser {
   }
   parseLatex(latex) {
     Logcal.start("LatexParser parseLatex: latex " + latex);
-    
+
     this.setInput(latex);
     const list = this.parseToChar("\\\\");
 

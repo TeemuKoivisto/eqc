@@ -7,11 +7,12 @@
     "node": "5.9"
   },
   "scripts": {
-    "lint": "eslint src/ test/ gulp/",
+    "lint": "eslint src/ test/ gulp/ || true",
     "start": "node index.js",
     "build": "gulp build",
     "build:watch": "gulp watch",
-    "test": "mocha --compilers js:babel-core/register test/**/*.js"
+    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register --recursive",
+    "test:watch": "npm test --watch"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
     "eslint": "^2.6.0",
     "eslint-config-airbnb": "^6.2.0",
     "eslint-plugin-react": "^4.2.3",
@@ -39,9 +41,9 @@
     "gulp-nodemon": "^2.0.6",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.3",
+    "istanbul": "^1.0.0-alpha.2",
     "mocha": "^2.4.5",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "wrench": "^1.5.9"
+    "vinyl-source-stream": "^1.1.0"
   }
 }
