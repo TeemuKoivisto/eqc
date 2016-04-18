@@ -18,7 +18,7 @@ describe("Logger", () => {
       expect(logger.equation).to.equal("asdf");
     });
   });
-  describe("newLatex(name)", () => {
+  xdescribe("newLatex(name)", () => {
     it("should log the step with a name and latex derived from this.equation", () => {
       const logger = new Logger();
       logger.setEquation();

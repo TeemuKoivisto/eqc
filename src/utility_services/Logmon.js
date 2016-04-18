@@ -147,5 +147,4 @@ let mockWindow = {};
 let logmon = new Logmon(mockWindow);
 logmon.createLoggerWithOptions("Logdef", false, true);
 logmon.createLoggerWithOptions("Logcal", false, true);
-console.log(logmon)
 export default logmon;
