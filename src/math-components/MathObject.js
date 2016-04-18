@@ -1,4 +1,4 @@
-import IDG from "../utility_services/IDG";
+import IDG from "../utility_services/IdGenerator";
 
 export default class MathObject {
   constructor(type) {

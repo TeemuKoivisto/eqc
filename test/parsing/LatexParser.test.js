@@ -5,10 +5,10 @@ import LatexParser from "../../src/parsing/LatexParser";
 const Parser = new LatexParser();
 
 describe("LatexParser", () => {
-  describe("should parse simple", () => {
-    xit("term equation", () => {
+  describe("parseEquation(latex)", () => {
+    it("should parse 1+1=2", () => {
       const result = Parser.parseEquation("1+1=2");
-      expect(result.toLatex()).toBe("1+1=2");
+      expect(result.toLatex()).to.equal("1+1=2");
     });
   });
 });

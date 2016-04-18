@@ -4,7 +4,7 @@ import MathOperation from "./math-components/basic/MathOperation";
 
 import LatexParser from "./parsing/LatexParser";
 
-import IDG from "./utility_services/IDG";
+import IDG from "./utility_services/IdGenerator";
 import Orderer from "./utility_services/Orderer";
 
 /*
@@ -40,4 +40,13 @@ let eqc = {
 const parser = new LatexParser();
 eqc.Parser = parser;
 
+const addToWindow = () => {
+  console.log("yo")
+  console.log(typeof window);
+  if (typeof window !== "undefined") {
+
+  }
+}
+
+addToWindow();
 module.exports = eqc;

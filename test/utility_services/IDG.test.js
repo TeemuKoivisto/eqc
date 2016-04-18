@@ -1,9 +1,9 @@
 import { expect } from "chai";
 
-import { IdGenerator } from "../../src/utility_services/IDG";
+import { IdGenerator } from "../../src/utility_services/IdGenerator";
 
 describe("IdGenerator", () => {
-  it("should start creating new ids from 0", () => {
+  it("should create ids starting from 0", () => {
     const IDG = new IdGenerator();
     const first = IDG.nextId();
     const second = IDG.nextId();

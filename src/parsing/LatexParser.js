@@ -1,3 +1,6 @@
+import Logmon from "../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+
 import Logger from "../utility_services/Logger";
 
 import MathEquation from "../math-components/basic/MathEquation";

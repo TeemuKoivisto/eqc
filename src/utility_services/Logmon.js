@@ -1,7 +1,7 @@
 export class Logmon {
-  constructor(window) {
+  constructor(windowRef) {
     this.loggers = [];
-    this.window = window;
+    this.window = windowRef;
   }
   createLogger(name) {
     this.loggers.push(new Logger(name));
@@ -16,13 +16,20 @@ export class Logmon {
     this.window[name] = this.loggers[this.loggers.length - 1];
     return this.loggers[this.loggers.length - 1];
   }
+  getLogger(name) {
+    for (const logger of this.loggers) {
+      if (logger.name === name) {
+        return logger;
+      }
+    }
+    return null;
+  }
   show() {
     this.loggers.map(logger => {
       console.log("", logger);
     });
   }
   disableLoggers() {
-    // this.loggers = map stuff?
     this.loggers.map(logger => {
       logger.testing = false;
     });
@@ -139,5 +146,6 @@ export class Logger {
 let mockWindow = {};
 let logmon = new Logmon(mockWindow);
 logmon.createLoggerWithOptions("Logdef", false, true);
-// logmon.createLoggerWithOptions("Logcal", false, true);
+logmon.createLoggerWithOptions("Logcal", false, true);
+console.log(logmon)
 export default logmon;
