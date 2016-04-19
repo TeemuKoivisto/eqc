@@ -11,7 +11,7 @@
     "start": "node index.js",
     "build": "gulp build",
     "build:watch": "gulp watch",
-    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register --recursive",
+    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register test/**/*.js",
     "test:watch": "npm test --watch"
   },
   "repository": {
