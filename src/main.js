@@ -41,12 +41,12 @@ const parser = new LatexParser();
 eqc.Parser = parser;
 
 const addToWindow = () => {
-  console.log("yo")
+  console.log("yo");
   console.log(typeof window);
   if (typeof window !== "undefined") {
 
   }
-}
+};
 
 addToWindow();
 module.exports = eqc;

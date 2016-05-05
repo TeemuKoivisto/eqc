@@ -295,8 +295,8 @@ export default class LatexParser {
       secondfactor = content[0];
       // makes multiplications shorter but kinda want the brackets to
       // reduce in order user inputted their stuff
-      //secondfactor = content[0].reduceAndReturnIfPossible();
-      //} else if (c === "-") {
+      // secondfactor = content[0].reduceAndReturnIfPossible();
+      // } else if (c === "-") {
     } else {
       console.log("currently " + this.currentlyParsed());
       throw ("error in parseMultiplication. unknown secondfactor: " + c);
@@ -306,7 +306,7 @@ export default class LatexParser {
     }
     var operation = new MathOperation(firstfactor, "*", secondfactor);
     list.push(operation);
-  };
+  }
 
   parseFraction(list) {
     Logcal.append("parseFraction: list " + list);
@@ -320,10 +320,10 @@ export default class LatexParser {
     var secondfactor = secondlist[0].reduceAndReturnIfPossible();
     var operation = new MathOperation(firstfactor, "/", secondfactor);
     list.push(operation);
-  };
+  }
 
   // parseTermOrFactorial ??
-  parseTerm () {
+  parseTerm() {
     Logcal.start("parseTerm:");
     var value = "",
       variable = "",
@@ -370,7 +370,7 @@ export default class LatexParser {
     }
     Logcal.end("FROM parseTerm: RETURN term " + term);
     return term;
-  };
+  }
 
   parseIfExponent() {
     Logcal.start("parseIfExponent:");
@@ -387,7 +387,7 @@ export default class LatexParser {
     }
     Logcal.end("FROM parseIfExponent: RETURN exponent " + exponent);
     return exponent;
-  };
+  }
 
   parseSign() {
     var negative = false;

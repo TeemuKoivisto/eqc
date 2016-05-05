@@ -9,9 +9,9 @@ const livereload = require("gulp-livereload");
 
 gulp.task("build", () => {
   return browserify({
-      entries: "./src/main.js",
-      debug: true,
-    })
+    entries: "./src/main.js",
+    debug: true,
+  })
     .transform("babelify", {
       presets: ["es2015"],
     })

@@ -48,7 +48,7 @@ export class Logger {
 
     this.log = [];
     this.currentIndent = "";
-    this.indent = "--- "
+    this.indent = "--- ";
 
     this.timer = {};
 

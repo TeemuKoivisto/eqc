@@ -8,6 +8,7 @@
   },
   "scripts": {
     "lint": "eslint src/ test/ gulp/ || true",
+    "lint:fix": "eslint src/ test/ gulp/ --fix",
     "start": "node index.js",
     "build": "gulp build",
     "build:watch": "gulp watch",

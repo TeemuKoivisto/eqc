@@ -5,7 +5,7 @@ export class Formulator {
     ];
   }
   getFormulaByName(name) {
-    
+
   }
 }
 
