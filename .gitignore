@@ -1,6 +1,9 @@
 # npm package folder
 node_modules/
 
+# bower package folder
+public/bower_components/
+
 # gedit files
 *~
 

@@ -24,22 +24,3 @@ gulp.task("build", () => {
     .pipe(gulp.dest("./dist/"))
     .pipe(livereload());
 });
-
-gulp.task("watch", ["build"], () => {
-  livereload.listen();
-  gulp.watch("./src/**/*.js", ["build"]);
-});
-
-const	nodemon = require("gulp-nodemon");
-
-gulp.task("nodemon", ["watch"], () => {
-	 // livereload.listen();
-	nodemon({
-		script: "index.js",
-		ext: "js html css",
-		ignore: ["src/**/*.js", "gulp", "test"]
-	}).on("restart", function(){
-		console.log("server restart");
-		 // livereload.reload();
-	})
-})
