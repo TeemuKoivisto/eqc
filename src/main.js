@@ -40,13 +40,11 @@ let eqc = {
 const parser = new LatexParser();
 eqc.Parser = parser;
 
-const addToWindow = () => {
-  console.log("yo");
-  console.log(typeof window);
-  if (typeof window !== "undefined") {
-
+const addToWindow = (windowInstance) => {
+  if (windowInstance) {
+    console.log("wee window")
   }
 };
 
-addToWindow();
+addToWindow(window);
 module.exports = eqc;

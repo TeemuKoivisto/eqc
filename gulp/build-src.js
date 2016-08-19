@@ -7,11 +7,11 @@ const uglify = require("gulp-uglify");
 const sourcemaps = require("gulp-sourcemaps");
 const livereload = require("gulp-livereload");
 
-gulp.task("build", () => {
+gulp.task("build-src", () => {
   return browserify({
-    entries: "./src/main.js",
-    debug: true,
-  })
+      entries: "./src/main.js",
+      debug: true,
+    })
     .transform("babelify", {
       presets: ["es2015"],
     })
