@@ -32,7 +32,7 @@ export default class LatexParser {
 
   parseEquation(latex) {
     Logcal.start("LatexParser parseEquation(latex): " + latex);
-    Logcal.timerStart("LatexParser parseEquation");
+    // Logcal.timerStart("LatexParser parseEquation");
 
     this.setInput(latex);
     const equation = new MathEquation();
@@ -44,7 +44,7 @@ export default class LatexParser {
       this.status = "Parser error";
     }
 
-    Logcal.timerEnd("LatexParser parseEquation");
+    // Logcal.timerEnd("LatexParser parseEquation");
     Logcal.append("equation(latex) " + equation.toLatex());
     Logcal.end("FROM LatexParser parseEquation: RETURN equation " + equation.toLatex());
     return equation;
@@ -61,8 +61,10 @@ export default class LatexParser {
 
     while (this.index < this.input.length) {
       if (this.bad === 10) return list;
-      lastChar = currentChar;
+      lastChar = this.getLastChar(this.index);
       currentChar = this.input.charAt(this.index);
+
+      console.log(currentChar)
 
       if (this.Evaluator.isParsableComponent(currentChar)) {
         component = this.parseNextComponent(list, signed);
@@ -80,43 +82,43 @@ export default class LatexParser {
           }
           negative = false;
           signed = false;
-        } else if (currentChar === exitingChar) {
-          if (this.index !== this.input.length - 1) {
-            this.parseChar();
-          }
-          Logcal.end("FROM parseToChar: exitingchar " + exitingChar + " RETURN list " + list);
-          return list;
-        } else if (currentChar === "-" || currentChar === "+") {
-          signed = true;
-          negative = this.parseSign();
-        } else if (currentChar === "^") {
-          component = this.parseIfExponent();
-          if (component) {
-            list[list.length - 1].setExponent(exponent);
-          }
-          // negative = false; // how could these even be possible??
-          // signed = false;
-        } else if (currentChar === "_") {
-          console.log("underscore _ inputted inside parseToChar and it's not implemented.. :/");
-          this.index++;
-        } else if (currentChar === "!") {
-          // factorials aren't consumed in parseBracketed?..
-          this.index++;
-        } else if (currentChar === "}" || currentChar === ")") {
-          // do nutting, just consume the char?
-          this.index++;
-        } else {
-          this.bad++;
-          this.index++;
-          if (this.bad === 10) {
-            console.log("too many bad characters " + this.currentlyParsed());
-            this.status = "Bad input";
-            Logcal.end("FROM parseToChar: exitingChar " + exitingChar + " RETURN list " + list);
-            throw new Error("Bad input");
-          }
-          negative = false;
-          signed = false;
         }
+      } else if (currentChar === exitingChar) {
+        if (this.index !== this.input.length - 1) {
+          this.parseChar();
+        }
+        Logcal.end("FROM parseToChar: exitingchar " + exitingChar + " RETURN list " + list);
+        return list;
+      } else if (currentChar === "-" || currentChar === "+") {
+        signed = true;
+        negative = this.parseSign();
+      } else if (currentChar === "^") {
+        component = this.parseIfExponent();
+        if (component) {
+          list[list.length - 1].setExponent(exponent);
+        }
+        // negative = false; // how could these even be possible??
+        // signed = false;
+      } else if (currentChar === "_") {
+        console.log("underscore _ inputted inside parseToChar and it's not implemented.. :/");
+        this.index++;
+      } else if (currentChar === "!") {
+        // factorials aren't consumed in parseBracketed?..
+        this.index++;
+      } else if (currentChar === "}" || currentChar === ")") {
+        // do nutting, just consume the char?
+        this.index++;
+      } else {
+        this.bad++;
+        this.index++;
+        if (this.bad === 10) {
+          console.log("too many bad characters " + this.currentlyParsed());
+          this.status = "Bad input";
+          Logcal.end("FROM parseToChar: exitingChar " + exitingChar + " RETURN list " + list);
+          throw new Error("Bad input");
+        }
+        negative = false;
+        signed = false;
       }
     }
     Logcal.end("FROM parseToChar: exitingChar " + exitingChar + " RETURN list " + list);
@@ -124,7 +126,7 @@ export default class LatexParser {
   }
 
   parseNextComponent(list, signed) {
-    Logcal.start("parseNextComponent(list, signed): ");
+    Logcal.start("parseNextComponent(list, signed): " + list + ", " + signed);
     let component = null,
       currentChar = this.parseIfWhitespace();
 
@@ -150,7 +152,7 @@ export default class LatexParser {
       throw new Error("Unknown currentChar(" + currentChar + ") in parseNextComponent");
       // return component;
     }
-    Logcal.end("FROM parseNextComponent: RETURN component " + component);
+    Logcal.end("FROM parseNextComponent(list, signed): RETURN component " + component);
     return component;
   }
 
@@ -223,13 +225,6 @@ export default class LatexParser {
     this.variables[alphaChar] ? this.variables[alphaChar]++ : this.variables[alphaChar] = 1;
   }
 
-  parseIfWhitespace() {
-    while (this.Evaluator.isWhitespace(this.input.charAt(this.index)) && this.index < this.input.length) {
-      this.index++;
-    }
-    return this.input.charAt(this.index);
-  }
-
   parseChar() {
     this.index++;
     return this.index < this.input.length ? this.input.charAt(this.index) : "\\\\";
@@ -237,5 +232,29 @@ export default class LatexParser {
 
   parseIfChar(requiredChar) {
     return this.input.charAt(this.index) === requiredChar ? this.parseChar() : "";
+  }
+
+  parseSign() {
+    var negative = false;
+    if (/^[\-]|[\+]/.test(this.getLastChar(this.index))) {
+      negative = this.getLastChar(this.index) === "-" ? !negative : negative;
+      this.parseChar();
+    }
+    Logcal.append("parseSign(): RETURN negative " + negative);
+    return negative;
+  }
+
+  parseIfWhitespace() {
+    while (this.Evaluator.isWhitespace(this.input.charAt(this.index)) && this.index < this.input.length) {
+      this.index++;
+    }
+    return this.input.charAt(this.index);
+  }
+
+  getLastChar(index) {
+    while (this.Evaluator.isWhitespace(this.input.charAt(index)) && index < 0) {
+      index--;
+    }
+    return this.input.charAt(index);
   }
 }

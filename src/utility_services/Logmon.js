@@ -106,11 +106,11 @@ export class Logger {
         }
       }
       var logged = this.currentIndent + string;
-      // if (this.consoling) {
-      // console.log(logged);
+      if (this.consoling) {
+        console.log(logged);
       // console.log("arguments size " + arguments.length);
       // console.log(arguments);
-      // }
+      }
       if (this.log.length === this.size) {
         this.log.splice(0, 1);
       }
@@ -146,5 +146,5 @@ export class Logger {
 let mockWindow = {};
 let logmon = new Logmon(mockWindow);
 logmon.createLoggerWithOptions("Logdef", false, true);
-logmon.createLoggerWithOptions("Logcal", false, true);
+logmon.createLoggerWithOptions("Logcal", true, true);
 export default logmon;

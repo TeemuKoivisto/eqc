@@ -1,11 +1,11 @@
-import MathObject from "./math-components/MathObject";
-import MathTerm from "./math-components/basic/MathTerm";
-import MathOperation from "./math-components/basic/MathOperation";
+// import MathObject from "./math-components/MathObject";
+// import MathTerm from "./math-components/basic/MathTerm";
+// import MathOperation from "./math-components/basic/MathOperation";
 
 import LatexParser from "./parsing/LatexParser";
 
-import IDG from "./utility_services/IdGenerator";
-import Orderer from "./utility_services/Orderer";
+// import IDG from "./utility_services/IdGenerator";
+// import Orderer from "./utility_services/Orderer";
 
 /*
  * Instance of Logmon used for logging
@@ -14,7 +14,7 @@ import Orderer from "./utility_services/Orderer";
 
 import Logmon from "./utility_services/Logmon";
 
-Logmon.createLoggerWithOptions("Logcal", false, true);
+// Logmon.createLoggerWithOptions("Logcal", true, true);
 
 // let eqc = {
 //   Calculator: {

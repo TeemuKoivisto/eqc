@@ -77,7 +77,8 @@ EqcApp.directive("solvearea", function() {
 
               /*var result = CalculatorSolver.checkEquationIsSolution(latex, $scope.solvefields[i].solution);*/
               console.log(eqc)
-              eqc.Parser.parseEquation(latex);
+              var equation = eqc.Parser.parseEquation(latex);
+              console.log(equation.toLatex())
               var result = "";
 
               if (result !== "false") {

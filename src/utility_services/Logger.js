@@ -18,6 +18,7 @@ export class Logger {
   setMessage(msg) {
     this.message = msg;
   }
+  // pushStepWithLatex
   createLatex(name, latex) {
     this.log.push({
       latex,
@@ -25,6 +26,7 @@ export class Logger {
       formula: "",
     });
   }
+  // pushStep
   newLatex(name) {
     this.log.push({
       latex: this.equation.toLatex(),
@@ -32,6 +34,7 @@ export class Logger {
       formula: "",
     });
   }
+  // pushStepWithFormula
   newLatexWithFormula(name, formulaName, variation) {
     const formula = Formulator.getFormulaByName(formulaName);
     if (typeof formula === "object") {
