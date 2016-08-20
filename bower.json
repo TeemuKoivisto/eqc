@@ -1,0 +1,25 @@
+{
+  "name": "eqc",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Teemu Koivisto"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-router": "^0.2.18",
+    "jquery": "^2.2.3",
+    "angular": "^1.5.5",
+    "Ionicons": "ionicons#^2.0.1",
+    "font-awesome": "^4.6.3"
+  }
+}
