@@ -42,7 +42,8 @@ eqc.Parser = parser;
 
 const addToWindow = (windowInstance) => {
   if (windowInstance) {
-    console.log("wee window")
+    console.log("wee window");
+    window.eqc = eqc;
   }
 };
 
