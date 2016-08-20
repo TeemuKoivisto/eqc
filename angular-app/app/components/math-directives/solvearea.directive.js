@@ -1,7 +1,7 @@
 EqcApp.directive("solvearea", function() {
   return {
     restrict: "E",
-    templateUrl: "templates/math-directives/templates/solvearea.html",
+    templateUrl: "templates/math-directives/solvearea.html",
     scope: {
       type: "=",
       solved: "=",
@@ -76,6 +76,8 @@ EqcApp.directive("solvearea", function() {
               // }
 
               /*var result = CalculatorSolver.checkEquationIsSolution(latex, $scope.solvefields[i].solution);*/
+              console.log(eqc)
+              eqc.Parser.parseEquation(latex);
               var result = "";
 
               if (result !== "false") {
@@ -164,7 +166,7 @@ EqcApp.directive("solvearea", function() {
 EqcApp.directive("solvefield", function($interval) {
   return {
     restrict: "E",
-    templateUrl: "app/components/math-directives/templates/solvefield",
+    templateUrl: "templates/math-directives/solvefield.html",
     replace: true,
     scope: {
       field: "="
@@ -173,19 +175,16 @@ EqcApp.directive("solvefield", function($interval) {
     link: function(scope, element, attrs, solveareaCtrl) {
       var commands = [{
         types: "check-solve-show",
-        // keys: "Ctrl-Enter",
         keys: "Enter",
         command: "solveExercise",
         args: 1
       }, {
         types: "solve",
-        // keys: "Ctrl-Enter",
         keys: "Shift-Enter",
         command: "createSolvefield",
         args: 1
       }, {
         types: "solve",
-        // keys: "Backspace-Enter",
         keys: "Shift-Backspace",
         command: "removeSolvefield",
         args: 1
@@ -224,25 +223,14 @@ EqcApp.directive("solvefield", function($interval) {
         $(element).find("span.editable").each(function(index) {
           var field = MathQuill.MathField(this, {
             spaceBehavesLikeTab: true,
-            //                    leftRightIntoCmdGoes: "up",
-            // restrictMismatchedBrackets: true,
-            //                    sumStartsWithNEquals: true,
-            //                    supSubsRequireOperand: true,
-            //                    charsThatBreakOutOfSupSub: "+-=<>",
-            ////                autoSubscriptNumerals: true,
-            //                    autoCommands: "pi theta sqrt sum",
-            //                    autoOperatorNames: "sin cos etc",
             capturingKeyEvents: true,
-            //                    substituteTextarea: function () {
-            //                        return document.createElement("textarea");
-            //                    },
             handlers: {
               captureKeyEvent: function(special) {
                 refresh();
                 for (var i = 0; i < commands.length; i++) {
                   // commands[i].types.indexOf(solveareaCtrl.type)
                   if (commands[i].types.indexOf(solveareaCtrl.getType()) !== -1 && commands[i].keys === special.key) {
-                    //                                console.log("executing command " + commands[i].command);
+                    console.log("executing command " + commands[i].command);
                     //                                if (commands[i].args !=)
                     // console.log("executing from ", scope.field);
                     special.evt.preventDefault();

@@ -1,0 +1,15 @@
+<div>
+  <div ng-repeat="solvefield in solvefields">
+    <embeddedkatex text="solveinfos[$index].step"></embeddedkatex>
+    <div ng-if="solveinfos[$index].formula">
+      <embeddedkatex text="solveinfos[$index].formula"></embeddedkatex>
+    </div>
+    <solvefield field="solvefield"></solvefield>
+    <span ng-click="solve($index)">
+      <span ng-show="solvefield.solved==='false'" class="glyphicon glyphicon-remove glyph red" aria-hidden="true"></span>
+      <span ng-show="solvefield.solved==='retarded'" class="glyphicon glyphicon-pencil glyph yellow" aria-hidden="true"></span>
+      <span ng-show="solvefield.solved==='true'" class="glyphicon glyphicon-ok glyph green" aria-hidden="true"></span>
+      <span ng-show="solvefield.solved==='broken'" class="glyphicon glyphicon-warning-sign glyph yellow" aria-hidden="true"></span>
+    </span>
+  </div>
+</div>

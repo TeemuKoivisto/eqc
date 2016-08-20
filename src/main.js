@@ -16,29 +16,30 @@ import Logmon from "./utility_services/Logmon";
 
 Logmon.createLoggerWithOptions("Logcal", false, true);
 
-let eqc = {
-  Calculator: {
+// let eqc = {
+//   Calculator: {
 
-  },
-  MathComponents: {
-    Basic: {
-      MathTerm,
-      MathOperation,
-    },
-    MathObject,
-  },
-  Parsing: {
-    LatexParser,
-  },
-  UtilityServices: {
-    IDG,
-    Orderer,
-    Penis: "afhh",
-  }
-};
+//   },
+//   MathComponents: {
+//     Basic: {
+//       MathTerm,
+//       MathOperation,
+//     },
+//     MathObject,
+//   },
+//   Parsing: {
+//     LatexParser,
+//   },
+//   UtilityServices: {
+//     IDG,
+//     Orderer,
+//     Penis: "afhh",
+//   }
+// };
 
-const parser = new LatexParser();
-eqc.Parser = parser;
+const eqc = {
+  Parser: new LatexParser(),
+}
 
 const addToWindow = (windowInstance) => {
   if (windowInstance) {
