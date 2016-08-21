@@ -46,7 +46,7 @@ export default class LatexParser {
 
     // Logcal.timerEnd("LatexParser parseEquation");
     Logcal.append("equation(latex) " + equation.toLatex());
-    Logcal.end("FROM LatexParser parseEquation: RETURN equation " + equation.toLatex());
+    Logcal.end("FROM LatexParser parseEquation(latex): RETURN equation " + equation.toLatex());
     return equation;
   }
 
@@ -62,9 +62,7 @@ export default class LatexParser {
     while (this.index < this.input.length) {
       if (this.bad === 10) return list;
       lastChar = this.getLastChar(this.index);
-      currentChar = this.input.charAt(this.index);
-
-      console.log(currentChar)
+      currentChar = this.getChar();
 
       if (this.Evaluator.isParsableComponent(currentChar)) {
         component = this.parseNextComponent(list, signed);
@@ -87,7 +85,8 @@ export default class LatexParser {
         if (this.index !== this.input.length - 1) {
           this.parseChar();
         }
-        Logcal.end("FROM parseToChar: exitingchar " + exitingChar + " RETURN list " + list);
+        Logcal.append("currentChar === exitingChar");
+        Logcal.end("FROM parseToChar(exitingchar): (" + exitingChar + ") RETURN list " + list);
         return list;
       } else if (currentChar === "-" || currentChar === "+") {
         signed = true;
@@ -114,14 +113,14 @@ export default class LatexParser {
         if (this.bad === 10) {
           console.log("too many bad characters " + this.currentlyParsed());
           this.status = "Bad input";
-          Logcal.end("FROM parseToChar: exitingChar " + exitingChar + " RETURN list " + list);
+          Logcal.end("FROM parseToChar(exitingChar): (" + exitingChar + ") RETURN list " + list);
           throw new Error("Bad input");
         }
         negative = false;
         signed = false;
       }
     }
-    Logcal.end("FROM parseToChar: exitingChar " + exitingChar + " RETURN list " + list);
+    Logcal.end("FROM parseToChar(exitingChar): RETURN list " + list);
     return list;
   }
 
@@ -148,7 +147,7 @@ export default class LatexParser {
       // component = list[list.length-1];
     } else {
       console.log("Unknown currentChar(" + currentChar + ") in parseNextComponent");
-      Logcal.end("FROM parseNextComponent: RETURN component " + component);
+      Logcal.end("FROM parseNextComponent(list, signed): RETURN component " + component);
       throw new Error("Unknown currentChar(" + currentChar + ") in parseNextComponent");
       // return component;
     }
@@ -161,7 +160,7 @@ export default class LatexParser {
     let value = "",
       variable = "",
       term, exponent, lower = "",
-      currentChar = this.input.charAt(this.index),
+      currentChar = this.getChar(),
       factorial = false;
 
     while (this.Evaluator.isNumeric(currentChar)) {
@@ -187,7 +186,7 @@ export default class LatexParser {
         lower = this.parseTerm();
       }
     }
-    currentChar = this.input.charAt(this.index); // or parseChar??
+    currentChar = this.getChar(); // or parseChar??
     exponent = this.parseIfExponent();
     if (currentChar === "'") {
       Logcal.append("Transforming Term into complement"); 
@@ -221,6 +220,148 @@ export default class LatexParser {
     return exponent;
   }
 
+  parseCommand(list, signed) {
+    Logcal.append("parseCommand(list, signed): " + list + ", " + signed);
+    let command = "",
+      lastChar = this.getLastChar(),
+      currentChar = this.parseChar(); // consuming \
+
+    while (this.Evaluator.isAlpha(currentChar)) {
+      command += currentChar;
+      currentChar = this.parseChar();
+      if (command.length === 10) {
+        throw ("overly long string in parseCommand " + command);
+      }
+    }
+    Logcal.append("Command is " + command);
+    switch (command) {
+      case "cdot":
+        this.parseMultiplication(list);
+        break;
+      case "frac":
+        this.parseFraction(list);
+        if (!signed && lastChar !== "=" && list.length > 1) {
+          Logcal.append("IF TRUE !signed && " + lastChar + " !== \"=\" && " + list.length + ">1");
+          Logcal.append(">CreateMultiplactionFromList(list) list " + list);
+          this.createMultiplicationFromList(list);
+        }
+        break;
+      case "left":
+        if (currentChar === "(" && (signed || lastChar === "=" || list.length === 0)) {
+          this.parseRoundBracketed(list);
+        } else if (currentChar === "(") {
+          this.parseMultiplication(list);
+        } else {
+          // unknown thingy i.e. { / [ / | or something
+          console.log("unknown left thingy " + c);
+          list.push(new MathSymbol(command));
+          break;
+        }
+        break;
+      case "right":
+        return; // returning to parseToChar without consuming ")" or whatever
+        break;
+      case "sum":
+        this.parseSum(list);
+        break;
+      case "binom":
+        this.parseBinomial(list);
+        if (!signed && lastChar !== "=" && list.length > 1) {
+          this.createMultiplicationFromList(list);
+        }
+        break;
+      case "mathsf":
+        let complement = [];
+        this.parseCurlyBracketed(complement);
+        let content = complement[0].content;
+        if (content.length === 1 && content[0].isTerm() && content[0].variable === "c") {
+          list.push(new MathSymbol("mathsf{c}"));
+        }
+        break;
+      case "text":
+        // just parses and ignores
+        this.skipToChar("}");
+        break;
+      default:
+        const symbol = new MathSymbol(command);
+        list.push(symbol);
+        break;
+    }
+  }
+
+  parseMultiplication(list) {
+    Logcal.append("parseMultiplication(list): " + list);
+
+    const firstfactor = list.splice(list.length - 1, 1)[0];
+    let secondfactor;
+    const currentChar = this.parseIfWhitespace();
+    const negative = this.parseSign();
+
+    if (this.Evaluator.isTerm(currentChar)) {
+      secondfactor = this.parseTerm();
+    } else if (currentChar === "\\") {
+      let content = [];
+      this.parseCommand(content);
+      secondfactor = content[0];
+    } else if (currentChar === "(") {
+      let content = [];
+      this.parseBracketed(content);
+      secondfactor = content[0];
+      // makes multiplications shorter but kinda want the brackets to
+      // reduce in order user inputted their stuff
+      // secondfactor = content[0].reduceAndReturnIfPossible();
+      // } else if (c === "-") {
+    } else {
+      console.log("currently " + this.currentlyParsed());
+      throw ("error in parseMultiplication. unknown secondfactor: " + currentChar);
+    }
+    if (negative) {
+      secondfactor.switchSign();
+    }
+    const operation = new MathOperation(firstfactor, "*", secondfactor);
+    list.push(operation);
+  }
+
+  parseFraction(list) {
+    Logcal.append("parseFraction(list): " + list);
+
+    let firstlist = [],
+      secondlist = [];
+
+    this.parseCurlyBracketed(firstlist);
+    this.parseCurlyBracketed(secondlist);
+
+    const firstfactor = firstlist[0].returnContentIfPossible();
+    const secondfactor = secondlist[0].returnContentIfPossible();
+    const operation = new MathOperation(firstfactor, "/", secondfactor);
+    list.push(operation);
+  }
+
+  parseCurlyBracketed(list) {
+    Logcal.append("parseCurlyBracketed(list): " + list);
+    this.parseIfChar("{");
+    const content = this.parseToChar("}");
+    let bracketed = new MathBracketed(content);
+    list.push(bracketed);
+  }
+
+  parseRoundBracketed(list) {
+    Logcal.append("parseRoundBracketed(list): " + list);
+    this.parseIfChar("("); // consuming the "("
+    let bracketed = new MathBracketed(this.parseToChar(")"));
+    bracketed.setExponent(this.parseIfExponent());
+    if (this.getChar() === "'") {
+      Logcal.append("Transforming Probability into complement");
+      this.parseChar();
+      bracketed.setExponent(new MathSymbol("mathsf{c}"));
+    }
+    // check if ! is found after ) => factorial
+    if (this.parseIfChar("!")) {
+      bracketed = new MathFactorial(bracketed);
+    }
+    list.push(bracketed);
+  }
+
   addAlphaCharToVariables(alphaChar) {
     this.variables[alphaChar] ? this.variables[alphaChar]++ : this.variables[alphaChar] = 1;
   }
@@ -235,9 +376,9 @@ export default class LatexParser {
   }
 
   parseSign() {
-    var negative = false;
-    if (/^[\-]|[\+]/.test(this.getLastChar(this.index))) {
-      negative = this.getLastChar(this.index) === "-" ? !negative : negative;
+    let negative = false;
+    while(this.Evaluator.isSign(this.getChar())) {
+      negative = this.getChar() === "-" ? !negative : negative;
       this.parseChar();
     }
     Logcal.append("parseSign(): RETURN negative " + negative);
@@ -256,5 +397,9 @@ export default class LatexParser {
       index--;
     }
     return this.input.charAt(index);
+  }
+
+  getChar() {
+    return this.index < this.input.length ? this.input.charAt(this.index) : "\\\\";
   }
 }

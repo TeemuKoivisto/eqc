@@ -13,6 +13,13 @@ export default class MathObject {
   setType(name) {
     this.type = name;
   }
+  isType(name) {
+    return this.type === name;
+  }
+  setExponent(exponent) {
+    this.exponent = exponent;
+    // throw new TypeError(`${this.type} must override method setExponent`);
+  }
   containsExponent() {
     return (this.exponent && this.exponent.length !== 0);
   }
@@ -21,9 +28,6 @@ export default class MathObject {
    */
   setOrder(depth) {
     throw new TypeError(`${this.type} must override method setOrder`);
-  }
-  setExponent(exponent) {
-    throw new TypeError(`${this.type} must override method setExponent`);
   }
   returnContentList() {
     throw new TypeError(`${this.type} must override method returnContentList`);
