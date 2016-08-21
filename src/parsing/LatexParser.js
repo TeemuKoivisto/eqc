@@ -8,6 +8,8 @@ import MathEquation from "../math-components/basic/MathEquation";
 import MathTerm from "../math-components/basic/MathTerm";
 import MathOperation from "../math-components/basic/MathOperation";
 import MathBracketed from "../math-components/basic/MathBracketed";
+import MathSymbol from "../math-components/basic/MathSymbol";
+
 import MathProbability from "../math-components/probability/MathProbability";
 import MathBinomial from "../math-components/probability/MathBinomial";
 import MathFactorial from "../math-components/probability/MathFactorial";
@@ -20,6 +22,7 @@ export default class LatexParser {
     this.index = 0;
     this.status = "";
     this.bad = 0;
+    this.variables = {};
   }
 
   setInput(latex) {
@@ -27,6 +30,7 @@ export default class LatexParser {
     this.index = 0;
     this.status = "";
     this.bad = 0;
+    this.variables = {};
     Logger.resetLogs();
   }
 
@@ -36,13 +40,13 @@ export default class LatexParser {
 
     this.setInput(latex);
     const equation = new MathEquation();
-    try {
+    // try {
       equation.leftside = this.parseToChar("=");
       equation.rightside = this.parseToChar("\\\\");
-    } catch (e) {
-      console.log("LatexParser errored!", e);
-      this.status = "Parser error";
-    }
+    // } catch (e) {
+    //   console.log("LatexParser errored!", e);
+    //   this.status = "Parser error";
+    // }
 
     // Logcal.timerEnd("LatexParser parseEquation");
     Logcal.append("equation(latex) " + equation.toLatex());
@@ -86,7 +90,7 @@ export default class LatexParser {
           this.parseChar();
         }
         Logcal.append("currentChar === exitingChar");
-        Logcal.end("FROM parseToChar(exitingchar): (" + exitingChar + ") RETURN list " + list);
+        Logcal.end("FROM parseToChar(exitingchar): " + exitingChar + " RETURN list " + list);
         return list;
       } else if (currentChar === "-" || currentChar === "+") {
         signed = true;
@@ -113,7 +117,7 @@ export default class LatexParser {
         if (this.bad === 10) {
           console.log("too many bad characters " + this.currentlyParsed());
           this.status = "Bad input";
-          Logcal.end("FROM parseToChar(exitingChar): (" + exitingChar + ") RETURN list " + list);
+          Logcal.end("FROM parseToChar(exitingChar): " + exitingChar + " RETURN list " + list);
           throw new Error("Bad input");
         }
         negative = false;
@@ -133,8 +137,7 @@ export default class LatexParser {
     // currentChar = this.input.charAt(this.index);
 
     if (currentChar === "P") {
-      currentChar = this.checkIfNextIs("\\left(");
-      if (currentChar) {
+      if (this.isNext("\\left(")) {
         component = this.parseProbability();
       } else {
         component = this.parseTerm();
@@ -148,7 +151,7 @@ export default class LatexParser {
     } else {
       console.log("Unknown currentChar(" + currentChar + ") in parseNextComponent");
       Logcal.end("FROM parseNextComponent(list, signed): RETURN component " + component);
-      throw new Error("Unknown currentChar(" + currentChar + ") in parseNextComponent");
+      throw new TypeError("Unknown currentChar " + currentChar + " in parseNextComponent");
       // return component;
     }
     Logcal.end("FROM parseNextComponent(list, signed): RETURN component " + component);
@@ -305,7 +308,7 @@ export default class LatexParser {
       secondfactor = content[0];
     } else if (currentChar === "(") {
       let content = [];
-      this.parseBracketed(content);
+      this.parseRoundBracketed(content);
       secondfactor = content[0];
       // makes multiplications shorter but kinda want the brackets to
       // reduce in order user inputted their stuff
@@ -362,6 +365,40 @@ export default class LatexParser {
     list.push(bracketed);
   }
 
+  parseProbability() {
+    Logcal.append("parseToProbability():");
+    let probability,
+      varlist = [];
+
+    this.parseIfChar("P"); // consuming the "P"
+    this.parseCommand(varlist, false); // parsing content between brackets P( <-> )
+    // this.parseBracketed(varlist);
+    const bracketed = varlist[0];
+    probability = new MathProbability(bracketed.content);
+    probability.setExponent(bracketed.exponent);
+    return probability;
+  }
+
+  parseBinomial(list) {
+    Logcal.append("parseToBinomial(list): " + list);
+    this.parseIfChar("{");
+    let upper,
+      lower,
+      firstlist = this.parseToChar("}");
+
+    upper = firstlist.length > 1 ? new MathBracketed(firstlist) : firstlist[0];
+
+    this.parseIfChar("{");
+    let secondlist = this.parseToChar("}");
+
+    lower = secondlist.length > 1 ? new MathBracketed(secondlist) : secondlist[0];
+
+    const binomial = new MathBinomial(upper, lower);
+    binomial.setExponent(this.parseIfExponent());
+    list.push(binomial);
+    return list;
+  }
+
   addAlphaCharToVariables(alphaChar) {
     this.variables[alphaChar] ? this.variables[alphaChar]++ : this.variables[alphaChar] = 1;
   }
@@ -401,5 +438,9 @@ export default class LatexParser {
 
   getChar() {
     return this.index < this.input.length ? this.input.charAt(this.index) : "\\\\";
+  }
+
+  isNext(latex) {
+    return this.input.length > (this.index + latex.length + 1) && this.input.substring(this.index + 1, (this.index + 1 + latex.length)) === latex;
   }
 }

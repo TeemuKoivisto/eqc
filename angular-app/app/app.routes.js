@@ -4,12 +4,11 @@ EqcApp.config(function ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/");
 
     $stateProvider
-		// .state("main", {
-		// 	url: "/",
-		// 	controller: "MainController",
-		// 	templateUrl: "app/components/main/main.html"
-		// })
-    .state("calculate", {
+		.state("main", {
+			controller: "MainController",
+			templateUrl: "templates/main/main.html"
+		})
+    .state("main.calculate", {
 			url: "/",
 			controller: "CalculateController",
 			templateUrl: "templates/calculate/calculate.html"

@@ -23,6 +23,18 @@ describe("LatexParser", () => {
         const result = Parser.parseEquation("\\left(1+1\\right)=2");
         expect(result.toLatex()).to.equal("\\left(1+1\\right)=2");
       });
+      it("should parse P\\left(A\\right)=2", () => {
+        const result = Parser.parseEquation("P\\left(A\\right)=2");
+        expect(result.toLatex()).to.equal("P\\left(A\\right)=2");
+      });
+      it("should parse P\\left(A\\mid B\\right)=2", () => {
+        const result = Parser.parseEquation("P\\left(A\\mid B\\right)=2");
+        expect(result.toLatex()).to.equal("P\\left(A\\mid B\\right)=2");
+      });
+      it("should parse \\binom{6}{3}=n", () => {
+        const result = Parser.parseEquation("\\binom{6}{3}=n");
+        expect(result.toLatex()).to.equal("\\binom{6}{3}=n");
+      });
     });
   });
 });
