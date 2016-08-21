@@ -64,5 +64,17 @@ describe("LatexParser", () => {
         expect(result.toLatex()).to.equal("-x^{0}+666^{x}-0.5x^{22x}+6.66x^{-x}=0x^{-2}+2x^{3x+3x}");
       });
     });
+
+    describe("(simple, fractions)", () => {
+      it("should parse firstdegree nonvariable terms", () => {
+        const result = Parser.parseEquation("-6\\cdot \\frac{6}{6\\cdot 6}+\\frac{6}{6}\\cdot 6-\\frac{\\frac{6\\cdot \\frac{6}{6}}{6\\cdot 6\\cdot 6}}{\\frac{6}{6}}=6");
+        expect(result.toLatex()).to.equal("-6\\cdot \\frac{6}{6\\cdot 6}+\\frac{6}{6}\\cdot 6-\\frac{\\frac{6\\cdot \\frac{6}{6}}{6\\cdot 6\\cdot 6}}{\\frac{6}{6}}=6");
+      });
+
+      it("should parse firstdegree variable terms", () => {
+        const result = Parser.parseEquation("-6x\\cdot \\frac{x}{6x\\cdot -6}+\\frac{6x}{-6x}\\cdot \\frac{x}{x}-\\frac{\\frac{x\\cdot \\frac{6x}{x+x}}{x\\cdot -\\frac{x}{x}}}{\\frac{5}{x}}=6");
+        expect(result.toLatex()).to.equal("-6x\\cdot \\frac{x}{6x\\cdot -6}+\\frac{6x}{-6x}\\cdot \\frac{x}{x}-\\frac{\\frac{x\\cdot \\frac{6x}{x+x}}{x\\cdot -\\frac{x}{x}}}{\\frac{5}{x}}=6");
+      });
+    });
   });
 });

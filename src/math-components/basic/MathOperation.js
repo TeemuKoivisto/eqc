@@ -11,6 +11,18 @@ export default class MathOperation extends MathObject {
     this.isfraction = this.operation === "/";
   }
 
+  switchSign() {
+    if (this.secondfactor.minussign && !this.firstfactor.minussign) {
+      this.secondfactor.switchSign();
+    } else if (!this.secondfactor.minussign && this.firstfactor.minussign) {
+      this.firstfactor.switchSign();
+    } else if (this.secondfactor.minussign && this.firstfactor.minussign) {
+      throw new TypeError("both factors are minussign in operation" + this);
+      // cancels each other out so only switching this minussign? same as both not minussign
+    }
+    this.minussign = !this.minussign;
+  }
+
   toLatex() {
     let latex = this.minussign ? "-" : "";
     if (this.operation === "*") {

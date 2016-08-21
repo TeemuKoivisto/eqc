@@ -297,8 +297,9 @@ export default class LatexParser {
 
     const firstfactor = list.splice(list.length - 1, 1)[0];
     let secondfactor;
-    const currentChar = this.parseIfWhitespace();
+    let currentChar = this.parseIfWhitespace();
     const negative = this.parseSign();
+    currentChar = this.getChar();
 
     if (this.Evaluator.isTerm(currentChar)) {
       secondfactor = this.parseTerm();
@@ -442,5 +443,9 @@ export default class LatexParser {
 
   isNext(latex) {
     return this.input.length > (this.index + latex.length + 1) && this.input.substring(this.index + 1, (this.index + 1 + latex.length)) === latex;
+  }
+
+  currentlyParsed() {
+    return this.input.slice(0, this.index);
   }
 }
