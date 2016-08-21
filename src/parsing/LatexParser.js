@@ -214,7 +214,7 @@ export default class LatexParser {
       if (currentChar === "{") {
         let list = [];
         this.parseCurlyBracketed(list);
-        exponent = list[0].reduceAndReturnIfPossible();
+        exponent = list[0].returnContentIfPossible();
       } else {
         exponent = this.parseTerm();
       }
