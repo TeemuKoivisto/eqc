@@ -8,6 +8,10 @@ export default class MathBracketed extends MathObject {
     this.content = contentList;
   }
 
+  switchSign() {
+    this.minussign = !this.minussign;
+  }
+
   checkIfBracketsNeeded() {
     return (this.exponent || this.minussign || this.content.length !== 1);
   }
@@ -64,7 +68,7 @@ export default class MathBracketed extends MathObject {
     latex += "\\right)";
     if (this.exponent) {
       latex += "^{";
-      if (this.exponent.isBracketed()) {
+      if (this.exponent.isType("Bracketed")) {
         latex += this.exponent.toLatexWithoutBrackets();
       } else {
         latex += this.exponent.toLatex();

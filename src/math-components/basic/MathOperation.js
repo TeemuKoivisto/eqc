@@ -35,7 +35,7 @@ export default class MathOperation extends MathObject {
     }
     if (this.exponent) {
       latex += "^{";
-      if (this.exponent.isBracketed()) {
+      if (this.exponent.isType("Bracketed")) {
         latex += this.exponent.toLatexWithoutBrackets();
       } else {
         latex += this.exponent.toLatex();

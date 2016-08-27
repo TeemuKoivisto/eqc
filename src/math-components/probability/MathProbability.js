@@ -17,7 +17,7 @@ export default class MathProbabilty extends MathObject {
     latex += "\\right)";
     if (this.exponent) {
       latex += "^{";
-      if (this.exponent.isBracketed()) {
+      if (this.exponent.isType("Bracketed")) {
         latex += this.exponent.toLatexWithoutBrackets();
       } else {
         latex += this.exponent.toLatex();

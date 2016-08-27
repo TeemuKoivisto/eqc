@@ -146,5 +146,5 @@ export class Logger {
 let mockWindow = {};
 let logmon = new Logmon(mockWindow);
 logmon.createLoggerWithOptions("Logdef", false, true);
-logmon.createLoggerWithOptions("Logcal", true, true);
+logmon.createLoggerWithOptions("Logcal", false, true);
 export default logmon;

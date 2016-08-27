@@ -193,7 +193,7 @@ export default class LatexParser {
     exponent = this.parseIfExponent();
     if (currentChar === "'") {
       Logcal.append("Transforming Term into complement"); 
-      c = this.parseChar(); 
+      currentChar = this.parseChar(); 
       exponent = new MathSymbol("mathsf{c}");
     }
     value = value.length === 0 ? 1 : parseFloat(value);
@@ -244,8 +244,7 @@ export default class LatexParser {
       case "frac":
         this.parseFraction(list);
         if (!signed && lastChar !== "=" && list.length > 1) {
-          Logcal.append("IF TRUE !signed && " + lastChar + " !== \"=\" && " + list.length + ">1");
-          Logcal.append(">CreateMultiplactionFromList(list) list " + list);
+          Logcal.append("CreateMultiplactionFromList(list): " + list);
           this.createMultiplicationFromList(list);
         }
         break;
@@ -277,7 +276,7 @@ export default class LatexParser {
         let complement = [];
         this.parseCurlyBracketed(complement);
         let content = complement[0].content;
-        if (content.length === 1 && content[0].isTerm() && content[0].variable === "c") {
+        if (content.length === 1 && content[0].isType("Term") && content[0].variable === "c") {
           list.push(new MathSymbol("mathsf{c}"));
         }
         break;
@@ -364,6 +363,13 @@ export default class LatexParser {
       bracketed = new MathFactorial(bracketed);
     }
     list.push(bracketed);
+  }
+
+  createMultiplicationFromList(list) {
+    const second = list.splice(list.length - 1, 1)[0];
+    const first = list.splice(list.length - 1, 1)[0];
+    let mult = new MathOperation(first, "*", second);
+    list.push(mult);
   }
 
   parseProbability() {
