@@ -1,3 +1,5 @@
+import Orderer from "../../utility_services/Orderer";
+
 import MathObject from "../MathObject";
 
 export default class MathBracketed extends MathObject {
@@ -6,6 +8,19 @@ export default class MathBracketed extends MathObject {
     super("Bracketed");
 
     this.content = contentList;
+  }
+
+  setOrder(order) {
+    order++;
+    this.order = order;
+    Orderer.registerComponent(order, "Bracketed");
+    for (var i = 0; i < this.content.length; i++) {
+      this.content[i].setOrder(order);
+    }
+    if (this.exponent && this.exponent.length !== 0) {
+      this.exponent.setOrder(order);
+      //Orderer.registerComponent(order, "Exponent");
+    }
   }
 
   switchSign() {

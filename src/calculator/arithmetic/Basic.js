@@ -13,6 +13,12 @@ class Basic extends Calculator {
 
   constructor() {
     super("Basic");
+
+    this.options = {
+      // "showBracketsAfterReducingIntoOneTerm": false,
+      "reduceFractions": true,
+      // "showSignOperations": false // >> +(-3) > -3 -(-3) > 3
+    }
   }
 
     // equation ei ole mathobject
@@ -663,10 +669,10 @@ class Basic extends Calculator {
     }
     // or exponent is variable?? how about that
     // !Operation.firsfactor.exponent.variable
-    if (Operation.firstfactor.exponent && (!Operation.firstfactor.isTerm() || !Operation.firstfactor.variable)) {
+    if (Operation.firstfactor.exponent && (!Operation.firstfactor.isType("Term") || !Operation.firstfactor.variable)) {
       Exponent.calculate(Operation, Operation.firstfactor);
     }
-    if (Operation.secondfactor.exponent && (!Operation.secondfactor.isTerm() || !Operation.secondfactor.variable)) {
+    if (Operation.secondfactor.exponent && (!Operation.secondfactor.isType("Term") || !Operation.secondfactor.variable)) {
       Exponent.calculate(Operation, Operation.secondfactor);
     }
     Logcal.end("FROM checkAndConvertIfExponents: Location " + Location + " Operation " + Operation + " RETURN false");

@@ -10,6 +10,8 @@ import Calculator from "../calculator/index";
 import LatexParser from "../parsing/LatexParser";
 const Parser = new LatexParser();
 
+import MathSymbol from "../math-components/basic/MathSymbol";
+
 class SolverCore {
 
   constructor() {

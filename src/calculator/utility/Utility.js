@@ -5,6 +5,8 @@ import Orderer from "../../utility_services/Orderer";
 
 import Calculator from "../Calculator";
 
+import MathTerm from "../../math-components/basic/MathTerm";
+
 class Utility extends Calculator {
 
   constructor() {
@@ -135,15 +137,15 @@ class Utility extends Calculator {
       this.replaceInsideListWithComponent(Location.rightside, Old, NewOne);
     } else if (Location.exponent && Location.exponent.id === Old.id) {
       Location.exponent = NewOne;
-    } else if (Location.isBracketed()) {
+    } else if (Location.isType("Bracketed")) {
       this.replaceInsideListWithComponent(Location.content, Old, NewOne);
-    } else if (Location.isOperation()) {
+    } else if (Location.isType("Operation")) {
       if (Location.firstfactor.id === Old.id) {
         Location.firstfactor = NewOne;
       } else {
         Location.secondfactor = NewOne;
       }
-    } else if (Location.isTerm()) {
+    } else if (Location.isType("Term")) {
       throw("fix this replacing shit");
       // does this even work..? Location can never be changed without knowing its parent Location
       Location = NewOne;
@@ -154,7 +156,7 @@ class Utility extends Calculator {
         Location.lower = NewOne;
       }
     } else if (Location.type === 'Factorial') {
-      if (Old.isBracketed() && NewOne.isTerm() && NewOne.getValue() < 0) {
+      if (Old.isType("Bracketed") && NewOne.isType("Term") && NewOne.getValue() < 0) {
         Logger.newLatex('Negative factorial $ ' + Location.toLatex() + '$, unable to calculate');
         throw('negative Factorial');
       } else {
@@ -356,7 +358,7 @@ class Utility extends Calculator {
         FirstC.exponent = new MathBracketed([FirstC.exponent, SecondC.exponent], "");
       } else if (SecondC.exponent) {
         SecondC.exponent.switchSign();
-        if (SecondC.exponent.isTerm() && SecondC.exponent.getValue() === 1) {
+        if (SecondC.exponent.isType("Term") && SecondC.exponent.getValue() === 1) {
           FirstC.exponent = "";
         } else {
           FirstC.exponent = SecondC.exponent;

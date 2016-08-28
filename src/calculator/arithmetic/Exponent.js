@@ -30,9 +30,9 @@ class Exponent extends Calculator {
 
   reduceTermsExponent(Location, Term) {
     Logcal.start("reduceTermExponent: Location " + Location + " Term " + Term);
-    if (Term.exponent.isTerm()) {
+    if (Term.exponent.isType("Term")) {
 
-    } else if (Term.exponent.isBracketed()) {
+    } else if (Term.exponent.isType("Bracketed")) {
       Sum.sumList(Term.exponent.content);
       if (Term.exponent.content.length === 1) {
         Term.exponent = Term.exponent.content[0];
@@ -43,13 +43,13 @@ class Exponent extends Calculator {
     if (Term.variable.length === 0 && Term.exponent) {
       Logger.newLatex("Reducing exponent $" + Term + "$");
       // Term.value = Math.pow(Term.value, Term.exponent.value);
-      if (Term.exponent.isTerm()) {
+      if (Term.exponent.isType("Term")) {
         Term.powValue(Term.exponent.value);
         Term.exponent = "";
       } else {
         throw ("unsupported non term as exponent to be pow\"d");
       }
-    } else if (Term.exponent.isTerm() && Term.exponent.getValue() === 1) {
+    } else if (Term.exponent.isType("Term") && Term.exponent.getValue() === 1) {
       Logger.newLatex("Power of one is removed from $" + Term + "$");
       Term.exponent = "";
     }

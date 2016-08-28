@@ -1,3 +1,5 @@
+import Orderer from "../../utility_services/Orderer";
+
 import MathObject from "../MathObject";
 
 export default class MathBinomial extends MathObject {

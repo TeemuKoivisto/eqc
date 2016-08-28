@@ -7,6 +7,9 @@ import Utility from "../utility/Utility";
 
 import Calculator from "../Calculator";
 
+import MathTerm from "../../math-components/basic/MathTerm";
+import MathOperation from "../../math-components/basic/MathOperation";
+
 class Probability extends Calculator {
 
   constructor() {
@@ -192,7 +195,7 @@ class Probability extends Calculator {
     } else {
       // var numerator = this.getValueForKey(Probability.content[0].variable);
       var numerator = this.getValueWithKey(Probability.content[0]);
-    var denominator = this.findAmount();
+      var denominator = this.findAmount();
       var operation = new MathOperation(new MathTerm('', numerator, ''), '/', new MathTerm('', denominator, ''));
       if (Probability.minussign) {
         operation.switchSign();

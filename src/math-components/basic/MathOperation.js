@@ -1,5 +1,7 @@
 import MathObject from "../MathObject";
 
+import Orderer from "../../utility_services/Orderer";
+
 export default class MathOperation extends MathObject {
   constructor(factorone, type, factortwo) {
     super("Operation");
@@ -9,6 +11,22 @@ export default class MathOperation extends MathObject {
     this.secondfactor = factortwo;
 
     this.isfraction = this.operation === "/";
+  }
+
+  setOrder(order) {
+    // console.log("ordering op " + order);
+    order++;
+    this.order = order;
+    Orderer.registerComponent(order, "Operation");
+    this.firstfactor.setOrder(order);
+    this.firstfactor.setParent(this);
+    this.secondfactor.setOrder(order);
+    this.secondfactor.setParent(this);
+    if (this.exponent && this.exponent.length !== 0) {
+      //Orderer.registerComponent(order, "Exponent");
+      this.exponent.setOrder(order);
+      this.exponent.setParent(this);
+    }
   }
 
   switchSign() {

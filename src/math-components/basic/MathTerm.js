@@ -1,6 +1,8 @@
 import Big from "big.js";
 import MathObject from "../MathObject";
 
+import Orderer from "../../utility_services/Orderer";
+
 export default class MathTerm extends MathObject {
   constructor(variable, value, exponent) {
     super("Term");
@@ -45,7 +47,37 @@ export default class MathTerm extends MathObject {
       this.value = new Big(Math.pow(this.getValue(), parseFloat(value.toString())));
     }
   }
+// needed for sorting in SolverCore 
+  getPossibleExponentValue() {
+    if (this.exponent) {
+      if (this.exponent.isType("Term")) {
+        return this.exponent.getValue();
+      } else {
+        return 9999;
+      }
+    } else {
+      return 1;
+    }
+  }
 
+  compareToTermExponents(FirstT, SecondT) {
+    if (FirstT.variable.length > SecondT.variable.length) {
+      return -1;
+    } else if (SecondT.variable.length > FirstT.variable.length) {
+      return 1;
+    } else {
+      var first = FirstT.getPossibleExponentValue();
+      var sec = SecondT.getPossibleExponentValue();
+      if (first > sec) {
+        return -1;
+      } else if (sec > first) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+  }
+// end
   setOrder(order) {
     // this.order = order;
     if (this.exponent && this.exponent.length !== 0) {
@@ -59,6 +91,12 @@ export default class MathTerm extends MathObject {
       this.exponent.setOrder(order);
       this.exponent.setParent(this);
     }
+  }
+// TODO is this necessary?
+  returnContentList() {
+    var list = [];
+    list.push(this);
+    return list;
   }
 
   getVariables() {
