@@ -53,11 +53,7 @@ export default class MathOperation extends MathObject {
     }
     if (this.exponent) {
       latex += "^{";
-      if (this.exponent.isType("Bracketed")) {
-        latex += this.exponent.toLatexWithoutBrackets();
-      } else {
-        latex += this.exponent.toLatex();
-      }
+      latex += this.exponent.isType("Bracketed") ? this.exponent.toLatexWithoutBrackets() : this.exponent.toLatex();
       latex += "}";
     }
     return latex;

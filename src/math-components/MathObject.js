@@ -38,21 +38,9 @@ export default class MathObject {
   switchSign() {
     throw new TypeError(`${this.type} must override method switchSign`);
   }
-  isEqual() {
-    throw new TypeError(`${this.type} must override method isEqual`);
-  }
-  isTerm() {
-    throw new TypeError(`${this.type} must override method isTerm`);
-  }
-  isOperation() {
-    throw new TypeError(`${this.type} must override method isOperation`);
-  }
-  isBracketed() {
-    throw new TypeError(`${this.type} must override method isBracketed`);
-  }
-  isSpecial() {
-    throw new TypeError(`${this.type} must override method isSpecial`);
-  }
+  // isEqual(MathComponent) {
+  //   throw new TypeError(`${this.type} must override method isEqual`);
+  // }
   isEmpty() {
     throw new TypeError(`${this.type} must override method isEmpty`);
   }

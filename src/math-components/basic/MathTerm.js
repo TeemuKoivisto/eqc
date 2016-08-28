@@ -139,11 +139,7 @@ export default class MathTerm extends MathObject {
     }
     if (this.containsExponent()) {
       latex += "^{";
-      if (this.exponent.isType("Bracketed")) {
-        latex += this.exponent.toLatexWithoutBrackets();
-      } else {
-        latex += this.exponent.toLatex();
-      }
+      latex += this.exponent.isType("Bracketed") ? this.exponent.toLatexWithoutBrackets() : this.exponent.toLatex();
       latex += "}";
     }
     return latex;

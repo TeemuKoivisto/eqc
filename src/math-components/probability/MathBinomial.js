@@ -23,29 +23,16 @@ export default class MathBinomial extends MathObject {
 
   toLatex() {
     let latex = "\\binom{";
-    if (this.upper.isType("Bracketed")) {
-      latex += this.upper.toLatexWithoutBrackets();
-    } else {
-      latex += this.upper.toLatex();
-    }
+    latex += this.upper.isType("Bracketed") ? this.upper.toLatexWithoutBrackets() : this.upper.toLatex();
     latex += "}{";
-    if (this.lower.isType("Bracketed")) {
-      latex += this.lower.toLatexWithoutBrackets();
-    } else {
-      latex += this.lower.toLatex();
-    }
+    latex += this.lower.isType("Bracketed") ? this.lower.toLatexWithoutBrackets() : this.lower.toLatex();
     if (this.exponent) {
       latex += "}^{";
-      if (this.exponent.isType("Bracketed")) {
-        latex += this.exponent.toLatexWithoutBrackets();
-      } else {
-        latex += this.toLatex();
-      }
+      latex += this.exponent.isType("Bracketed") ? this.exponent.toLatexWithoutBrackets() : this.exponent.toLatex();
       latex += "}";
     } else {
       latex += "}";
     }
     return latex;
   }
-
 }

@@ -24,9 +24,9 @@ class Converter extends Calculator {
     //console.log("order is " + (Orderer.orders[0]+1) + " and this object " + MathObject.order );
     Logcal.start("CalculatorConverter calculate: Location " + Location + " MathObject " + MathObject);
     //var locationType = Object.prototype.toString.call(Location) === '[object Array]' ? "Equation" : Location.type;
-    if (MathObject.type === "Binomial") {
+    if (MathObject.isType("Binomial")) {
       this.convertBinomialToFactorials(Location, MathObject);
-    } else if (MathObject.type === "Factorial") {
+    } else if (MathObject.isType("Factorial")) {
       this.convertFactorialToValue(Location, MathObject);
     }
     Logcal.end("FROM CalculatorConverter calculate: Location " + Location + " MathObject " + MathObject);

@@ -18,11 +18,11 @@ class Exponent extends Calculator {
   calculate(Location, MathObject) {
     Logcal.start("CalculatorExponent calculate: Location " + Location + " MathObject " + MathObject);
     //var locationType = Object.prototype.toString.call(Location) === "[object Array]" ? "Equation" : Location.type;
-    if (MathObject.type === "Term") {
+    if (MathObject.isType("Term")) {
       this.reduceTermsExponent(Location, MathObject);
       //} else if (MathObject.type === "Operation") {
       //    this.reduceOperationExponent(Location, MathObject);
-    } else if (MathObject.type === "Bracketed") {
+    } else if (MathObject.isType("Bracketed")) {
       this.reduceBracketedsExponent(Location, MathObject);
     }
     Logcal.end("FROM CalculatorExponent calculate: Location " + Location + " MathObject " + MathObject);

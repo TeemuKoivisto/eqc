@@ -133,7 +133,7 @@ class Utility extends Calculator {
     //NewOne.exponent = Old.exponent;
     if (Object.prototype.toString.call(Location) === '[object Array]') {
       this.replaceInsideListWithComponent(Location, Old, NewOne);
-    } else if (Location.type === 'Equation') {
+    } else if (Location.isType("Equation")) {
       // console.log('yo list', Location);
       this.replaceInsideListWithComponent(Location.leftside, Old, NewOne);
       this.replaceInsideListWithComponent(Location.rightside, Old, NewOne);
@@ -151,13 +151,13 @@ class Utility extends Calculator {
       throw("fix this replacing shit");
       // does this even work..? Location can never be changed without knowing its parent Location
       Location = NewOne;
-    } else if (Location.type === "Binomial") {
+    } else if (Location.isType("Binomial")) {
       if (Location.upper.id === Old.id) {
         Location.upper = NewOne;
       } else {
         Location.lower = NewOne;
       }
-    } else if (Location.type === 'Factorial') {
+    } else if (Location.isType("Factorial")) {
       if (Old.isType("Bracketed") && NewOne.isType("Term") && NewOne.getValue() < 0) {
         Logger.newLatex('Negative factorial $ ' + Location.toLatex() + '$, unable to calculate');
         throw('negative Factorial');
@@ -432,14 +432,14 @@ class Utility extends Calculator {
   }
 
   cloneProbabilityWithoutExponent(Probability) {
-    var newcontent = [];
+    let newcontent = [];
     for(var index in Probability.content) {
       if (Probability.content[index].isType("Term")) {
-      newcontent.push(this.cloneTerm(Probability.content[index]));
+        newcontent.push(this.cloneTerm(Probability.content[index]));
       } else if (Probability.content[index].type==="Symbol") {
-      newcontent.push(Probability.content[index]);
+        newcontent.push(Probability.content[index]);
       } else {
-      throw("not supported yet in cloning probability");
+        throw("not supported yet in cloning probability");
       }
     }
     var prob = new MathProbability(newcontent);

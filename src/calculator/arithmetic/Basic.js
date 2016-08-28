@@ -27,8 +27,8 @@ class Basic extends Calculator {
     //console.log("order is " + (Orderer.orders[0]+1) + " and this object " + MathObject.order );
     Logcal.start("CalculatorBasic calculate: Location " + Location + " MathObject " + MathObject);
 
-    if (MathObject.type !== "Operation") {
-      if (MathObject.type === "Bracketed") {
+    if (!MathObject.isType("Operation")) {
+      if (MathObject.isType("Bracketed")) {
         this.sumList(MathObject.content);
         // tässä joku checkki jos tulos on 1 size bracketed niin sievennys
         if (MathObject.content.length === 1) {
@@ -37,7 +37,7 @@ class Basic extends Calculator {
           }
           MathObject.content[0].exponent = MathObject.exponent;
           Utility.replaceSingleComponentWithComponent(Location, MathObject, MathObject.content[0]);
-        } else if (Location.type === "Bracketed" || Location.type === "MathArray" || Location.type === "Equation") {
+        } else if (Location.isType("Bracketed") || Location.isType("MathArray") || Location.isType("Equation")) {
           Logcal.append("CONDITION TRUE " + Location.type + " === Bracketed || " + Location.type + " === MathArray || " + Location.type + " === Equation");
           if (MathObject.minussign) {
             for (var i = 0; i < MathObject.content.length; i++) {
@@ -46,7 +46,7 @@ class Basic extends Calculator {
           }
           Utility.replaceSingleComponentWithList(Location, MathObject, MathObject.content);
         }
-      } else if (MathObject.type === "Equation") {
+      } else if (MathObject.isType("Equation")) {
         // this.sumList(MathObject.larray.content);
         // this.sumList(MathObject.rarray.content);
         // throw("fix me?")
@@ -274,7 +274,8 @@ class Basic extends Calculator {
     for (var i = 0; i < Multiplicand.content.length; i++) {
       for (var j = 0; j < Multiplier.content.length; j++) {
         //                this["multiply" + Multiplicand.content[i].type + "And" + Multiplier.content[j].type](Multiplicand.content[i], Multiplier.content[j]);
-        var copy = jQuery.extend(true, {}, Multiplicand.content[i]);
+        // var copy = jQuery.extend(true, {}, Multiplicand.content[i]);
+        var copy = Object.assign({}, Multiplicand.content[i]);
         this["multiply" + Multiplicand.content[i].type + "And" + Multiplier.content[j].type](copy, Multiplier.content[j]);
         result.push(copy);
         //                var copy = jQuery.extend(true, {}, Multiplicand.content[i]);

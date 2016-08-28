@@ -13,7 +13,8 @@ export default class MathProbabilty extends MathObject {
   switchSign() {
     this.minussign = !this.minussign;
   }
-
+// special method used by CalculatorProbability
+// PROBABLY should be using different way but well eh...
   toSymbols() {
     var symbols = "";
     for (var i = 0; i < this.content.length; i++) {
@@ -45,11 +46,7 @@ export default class MathProbabilty extends MathObject {
     latex += "\\right)";
     if (this.exponent) {
       latex += "^{";
-      if (this.exponent.isType("Bracketed")) {
-        latex += this.exponent.toLatexWithoutBrackets();
-      } else {
-        latex += this.exponent.toLatex();
-      }
+      latex += this.exponent.isType("Bracketed") ? this.exponent.toLatexWithoutBrackets() : this.exponent.toLatex();
       latex += "}";
     }
     return latex;

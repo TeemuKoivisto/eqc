@@ -333,7 +333,8 @@ class Probability extends Calculator {
   
   hasComplement(MathObject) {
     // return (MathObject.exponent && MathObject.length !== 0 && (MathObject.exponent.toString() === "mathsf{c}" || MathObject.exponent.toString() === "'"))
-    if (MathObject.exponent && MathObject.length !== 0 && (MathObject.exponent.command === "mathsf{c}" || MathObject.exponent.command === "'")) {
+    if (MathObject.exponent && MathObject.length !== 0 && (MathObject.exponent.command === "mathsf{c}"
+     || MathObject.exponent.command === "'")) {
       return true;
     } else {
       return false;

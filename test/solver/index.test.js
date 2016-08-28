@@ -273,7 +273,7 @@ describe("CalculatorSolver", () => {
         expectSolutionToBe(solution, "true", 1, 0, "n", 1, ["1.2599210498948732"]);
       });
       // TODO old test
-      xit("n^2, variable and term", () => {
+      it("n^2, variable and term", () => {
         const solution = Solver.solveEquationUnlogged("4=n^2");
         expectSolutionToBe(solution, "true", 1, 0, "n", 1, ["8"]);
       });
