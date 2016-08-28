@@ -1,62 +1,70 @@
-Calculator.service('CalculatorSolver', function(CalculatorSolverLogic, CalculatorMain, Logger) {
+import Logger from "../utility_services/Logger";
+import Logmon from "../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+import Orderer from "../utility_services/Orderer";
 
-  this.setOptions = function(option, which) {
-  CalculatorMain.setOptions(option, which);
-  };
+import Calculator from "../calculator/index";
 
-  this.checkEquationIsSolution = function(latex, solution) {
-  Logcal.start('CalculatorSolver checkEquationIsSolution: latex ' + latex + ' solution ' + solution);
-  var solved = CalculatorSolverLogic.solveWithCombinations(latex, solution.combinations);
-  // var solution2 = CalculatorSolverLogic.solve(solution.result);
-  console.log('solution ', solved);
-  console.log('should be ', solution)
-    // console.log('solution2 ', solution2);
-  var result;
-  if (solved.result === 'rightCombination') {
-    result = 'true';
-  } else if (solved.result === 'retarded') {
-    result = 'retarded'
-  } else if (solved.result === 'unable') {
-    result = 'broken';
-  } else if (solved.result !== 'checkMe' && solved.result !== solution.result) {
-    console.log('s1 result ei ole check me ja eivat ole samat')
-    result = 'false';
-  } else if (solved.variables.length !== solution.variables.length) {
-    console.log('pituus ei sama')
-    result = 'false';
-  } else if (solved.variables.length > 0 && solution.variables.length > 0) {
-    console.log('variables pituus yli 0')
-    if (solved.variables.length > 1) {
-    // TODO multiple variables
-    result = 'false';
-    } else {
-    var v1 = solved.variables[0];
-    var v2 = solution.variables[0];
-    if (v1.key !== v2.key) {
-      result = 'false';
-    } else {
+import Core from "./core";
+
+class Solver {
+
+  constructor() {
+  }
+
+  checkEquationIsSolution(latex, solution) {
+    Logcal.start('CalculatorSolver checkEquationIsSolution: latex ' + latex + ' solution ' + solution);
+    var solved = Core.solveWithCombinations(latex, solution.combinations);
+    // var solution2 = Core.solve(solution.result);
+    console.log('solution ', solved);
+    console.log('should be ', solution)
+      // console.log('solution2 ', solution2);
+    var result;
+    if (solved.result === 'rightCombination') {
       result = 'true';
-      for (var s = 0; s < v1.solutions.length; s++) {
-      // TODO doesn't differentiate between order
-      if (v1.solutions[s] !== v2.solutions[s]) {
+    } else if (solved.result === 'retarded') {
+      result = 'retarded'
+    } else if (solved.result === 'unable') {
+      result = 'broken';
+    } else if (solved.result !== 'checkMe' && solved.result !== solution.result) {
+      console.log('s1 result ei ole check me ja eivat ole samat')
+      result = 'false';
+    } else if (solved.variables.length !== solution.variables.length) {
+      console.log('pituus ei sama')
+      result = 'false';
+    } else if (solved.variables.length > 0 && solution.variables.length > 0) {
+      console.log('variables pituus yli 0')
+      if (solved.variables.length > 1) {
+      // TODO multiple variables
+      result = 'false';
+      } else {
+      var v1 = solved.variables[0];
+      var v2 = solution.variables[0];
+      if (v1.key !== v2.key) {
         result = 'false';
-        break;
+      } else {
+        result = 'true';
+        for (var s = 0; s < v1.solutions.length; s++) {
+        // TODO doesn't differentiate between order
+        if (v1.solutions[s] !== v2.solutions[s]) {
+          result = 'false';
+          break;
+        }
+        }
+        if (solved.result === 'checkMe' && result === 'true') {
+        result = 'retarded';
+        }
       }
-      }
-      if (solved.result === 'checkMe' && result === 'true') {
-      result = 'retarded';
       }
     }
-    }
-  }
-  Logcal.end('FROM CalculatorSolver checkEquationIsSolution: latex ' + latex + ' solution ' + solution + ' RETURN result ' + result);
-  return result;
+    Logcal.end('FROM CalculatorSolver checkEquationIsSolution: latex ' + latex + ' solution ' + solution + ' RETURN result ' + result);
+    return result;
   }
 
-  // this.checkEquationIsSolution2 = function(latex, solution) {
+  // this.checkEquationIsSolution2(latex, solution) {
   // Logcal.start('CalculatorSolver solveEquationIsSolution: latex ' + latex + ' solution ' + solution);
-  // var solution1 = CalculatorSolverLogic.solveWithCombinations(latex, solution.combinations);
-  // // var solution2 = CalculatorSolverLogic.solve(solution.result);
+  // var solution1 = Core.solveWithCombinations(latex, solution.combinations);
+  // // var solution2 = Core.solve(solution.result);
   // console.log('solution ', solution1);
   // console.log('should be ', solution)
   // // console.log('solution2 ', solution2);
@@ -106,33 +114,35 @@ Calculator.service('CalculatorSolver', function(CalculatorSolverLogic, Calculato
   // return result;
   // };
 
-  this.solveEquationUnlogged = function(latex) {
-  Logcal.start('CalculatorSolver solveEquationUnlogged: latex ' + latex);
-  var solution = CalculatorSolverLogic.solve(latex);
-  Logcal.append('solution ', solution);
-  Logcal.end('FROM CalculatorSolver solveEquationUnlogged: latex ' + latex + ' RETURN solution ' + solution);
-  return solution;
-  };
-
-  this.solveEquationLogged = function(latex) {
-  Logcal.start('CalculatorSolver solveEquationLogged: latex ' + latex);
-  Logcal.timerStart('CalculatorSolver solveEquationLogged');
-  var solution = CalculatorSolverLogic.solve(latex);
-  Logcal.append('solution ', solution);
-  if (solution.variables.length === 1) {
-    for (var i = 0; i < solution.variables[0].solutions.length; i++) {
-    Logger.createLatex("Result:", solution.variables[0].key + '=' + solution.variables[0].solutions[i]);
-    }
-  } else if (solution.variables.length === 0) {
-    Logger.createLatex("No result:\n" + solution.message, 0);
-  } else {
-    Logger.createLatex("Many results:\n" + solution.message, 0);
+  solveEquationUnlogged(latex) {
+    Logcal.start('CalculatorSolver solveEquationUnlogged: latex ' + latex);
+    var solution = Core.solve(latex);
+    Logcal.append('solution ', solution);
+    Logcal.end('FROM CalculatorSolver solveEquationUnlogged: latex ' + latex + ' RETURN solution ' + solution);
+    return solution;
   }
 
-  var list = Logger.log;
+  solveEquationLogged(latex) {
+    Logcal.start('CalculatorSolver solveEquationLogged: latex ' + latex);
+    Logcal.timerStart('CalculatorSolver solveEquationLogged');
+    var solution = Core.solve(latex);
+    Logcal.append('solution ', solution);
+    if (solution.variables.length === 1) {
+      for (var i = 0; i < solution.variables[0].solutions.length; i++) {
+      Logger.createLatex("Result:", solution.variables[0].key + '=' + solution.variables[0].solutions[i]);
+      }
+    } else if (solution.variables.length === 0) {
+      Logger.createLatex("No result:\n" + solution.message, 0);
+    } else {
+      Logger.createLatex("Many results:\n" + solution.message, 0);
+    }
 
-  Logcal.timerEnd('CalculatorSolver solveEquationLogged');
-  Logcal.end('FROM CalculatorSolver solveEquationLogged: latex ' + latex + ' RETURN list ' + list);
-  return list;
-  };
-});
+    var list = Logger.log;
+
+    Logcal.timerEnd('CalculatorSolver solveEquationLogged');
+    Logcal.end('FROM CalculatorSolver solveEquationLogged: latex ' + latex + ' RETURN list ' + list);
+    return list;
+  }
+}
+
+export default new Solver();

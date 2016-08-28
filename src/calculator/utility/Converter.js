@@ -1,18 +1,19 @@
+import Logger from "../../utility_services/Logger";
+import Logmon from "../../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+import Orderer from "../../utility_services/Orderer";
+
+import Utility from "../utility/Utility";
 
 import Calculator from "../Calculator";
 
-export default class Converter extends Calculator {
+class Converter extends Calculator {
 
   constructor() {
     super("Converter");
   }
 
-  this.options = {
-    reduceFractions: true,
-    "showBracketsAfterReducingIntoOneTerm": false
-  };
-
-  this.calculate = function (Location, MathObject) {
+  calculate(Location, MathObject) {
     //console.log("order is " + (Orderer.orders[0]+1) + " and this object " + MathObject.order );
     Logcal.start("CalculatorConverter calculate: Location " + Location + " MathObject " + MathObject);
     //var locationType = Object.prototype.toString.call(Location) === '[object Array]' ? "Equation" : Location.type;
@@ -22,17 +23,17 @@ export default class Converter extends Calculator {
       this.convertFactorialToValue(Location, MathObject);
     }
     Logcal.end("FROM CalculatorConverter calculate: Location " + Location + " MathObject " + MathObject);
-  };
+  }
 
   // uses the formula n!/k!(n-k)!
-  this.convertBinomialToFactorials = function(Location, Binomial) {
+  convertBinomialToFactorials(Location, Binomial) {
     Logcal.start("convertBinomialToFactorials: Location " + Location + " Binomial " + Binomial);
     if (!Binomial.upper.isTerm()) {
       // use calculate or sumlist or just set brackets before binomials?
-      CalculatorBasic.calculate(Binomial, Binomial.upper);
+      Basic.calculate(Binomial, Binomial.upper);
     }
     if (!Binomial.lower.isTerm()) {
-      CalculatorBasic.calculate(Binomial, Binomial.lower);
+      Basic.calculate(Binomial, Binomial.lower);
     }
     // console.log('', Binomial.parent)
     if (Binomial.upper.isTerm() && Binomial.lower.isTerm()) {
@@ -49,7 +50,7 @@ export default class Converter extends Calculator {
       var result = new MathOperation(upperfactorial, '/', loweroperation);
       // Logger.newLatex("Reducing binomial into factorials " + Binomial.toLatex());
       Logger.newLatexWithFormula("Reducing binomial $" + Binomial.toLatex() + '$ into factorials', 'Binomial', 0);
-      CalculatorUtil.replaceSingleComponentWithComponent(Location, Binomial, result);
+      Utility.replaceSingleComponentWithComponent(Location, Binomial, result);
       Orderer.availableConversions.push({ type: "BinomialToFactorial", id: upperfactorial.id }); // estää yksittäisten kertomien laskennan?
       Orderer.addUnderConversion([upperfactorial.id, lowerhigherfactorial.id, lowersmallerfactorial.id]);
       // vai muokkaa vain orderia että, operaatio on orderia isompi... yes...
@@ -58,7 +59,7 @@ export default class Converter extends Calculator {
       throw("heh vituix meni binomin ratkasu");
     }
     Logcal.end("FROM convertBinomialToFactorials: Location " + Location + " Binomial " + Binomial);
-  };
+  }
 
   // pitää olla myös valmis laskemaan kertomia ilman binomeja
   /**
@@ -70,7 +71,7 @@ export default class Converter extends Calculator {
    * @param {MathObject/Array} Location - Location of the factorial.
    * @param {MathObject} Factorial - Factorial to be converted.
    */
-  this.convertFactorialToValue = function(Location, Factorial) {
+  convertFactorialToValue(Location, Factorial) {
     Logcal.start("convertFactorialToValue: Location " + Location + " Factorial " + Factorial);
     // checks if factorial converted by binomial to fraction
     if (Orderer.checkAndRemoveConversion('BinomialToFactorial', Factorial)) {
@@ -81,11 +82,11 @@ export default class Converter extends Calculator {
       }
       if (lower === 0) {
         Logger.newLatexWithFormula("Converting factorials $" + Location.toLatex() + '$ to 0', 'Binomial rules', 1);
-        CalculatorUtil.replaceSingleComponentWithComponent(Location.parent, Location, new MathTerm('', 1, ''));
+        Utility.replaceSingleComponentWithComponent(Location.parent, Location, new MathTerm('', 1, ''));
         Orderer.locked.push(Location.id);
       } else if (lower < 0 || lower > higher) {
         Logger.newLatexWithFormula("Converting factorials $" + Location.toLatex() + '$ to 0', 'Binomial rules', 0);
-        CalculatorUtil.replaceSingleComponentWithComponent(Location.parent, Location, new MathTerm('', 0, ''));
+        Utility.replaceSingleComponentWithComponent(Location.parent, Location, new MathTerm('', 0, ''));
         Orderer.locked.push(Location.id);
       } else {
         var top = new MathTerm('', higher+1, '');
@@ -101,7 +102,7 @@ export default class Converter extends Calculator {
         Logger.newLatex("Converting factorials $" + Location.toLatex() + '$ into multiplications');
         // console.log('factorial loc', Location)
         var newFraction = new MathOperation(top, '/', bottom);
-        CalculatorUtil.replaceSingleComponentWithComponent(Location.parent, Location, newFraction);
+        Utility.replaceSingleComponentWithComponent(Location.parent, Location, newFraction);
         // Orderer.setOrder(Location.parent, Location.order, newFraction);
         // Orderer.locked.push(newFraction.id);
         Orderer.locked.push(Location.id);
@@ -121,13 +122,15 @@ export default class Converter extends Calculator {
         operation = new MathTerm('', 1, '');
       }
       Logger.newLatex("Converting factorial $" + Factorial.toLatex() + '$ into multiplications');
-      CalculatorUtil.replaceSingleComponentWithComponent(Location, Factorial, operation);
+      Utility.replaceSingleComponentWithComponent(Location, Factorial, operation);
       Orderer.locked.push(operation); // needed for exponents i.e. 2^5!
     }
     Logcal.end("FROM convertFactorialToValue: Location " + Location + " Factorial " + Factorial);
-  };
+  }
 
-  this.convertVariableToValue = function(Location, Component) {
+  convertVariableToValue(Location, Component) {
     // TODO
   }
 }
+
+export default new Converter();

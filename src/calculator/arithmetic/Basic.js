@@ -1,6 +1,15 @@
+import Logger from "../../utility_services/Logger";
+import Logmon from "../../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+import Orderer from "../../utility_services/Orderer";
+
+import Exponent from "./Exponent";
+
+import Utility from "../utility/Utility";
+
 import Calculator from "../Calculator";
 
-export default class Basic extends Calculator {
+class Basic extends Calculator {
 
   constructor() {
     super("Basic");
@@ -21,7 +30,7 @@ export default class Basic extends Calculator {
             MathObject.content[0].switchSign();
           }
           MathObject.content[0].exponent = MathObject.exponent;
-          CalculatorUtil.replaceSingleComponentWithComponent(Location, MathObject, MathObject.content[0]);
+          Utility.replaceSingleComponentWithComponent(Location, MathObject, MathObject.content[0]);
         } else if (Location.type === "Bracketed" || Location.type === "MathArray" || Location.type === "Equation") {
           Logcal.append("CONDITION TRUE " + Location.type + " === Bracketed || " + Location.type + " === MathArray || " + Location.type + " === Equation");
           if (MathObject.minussign) {
@@ -29,7 +38,7 @@ export default class Basic extends Calculator {
               MathObject.content[i].switchSign();
             }
           }
-          CalculatorUtil.replaceSingleComponentWithList(Location, MathObject, MathObject.content);
+          Utility.replaceSingleComponentWithList(Location, MathObject, MathObject.content);
         }
       } else if (MathObject.type === "Equation") {
         // this.sumList(MathObject.larray.content);
@@ -104,7 +113,7 @@ export default class Basic extends Calculator {
   ////            console.log("list was " + list);
   //            var newcomponent = list.length === 1 ? list[0] : new MathBracketed(list);
   ////            console.log("current is term so in " + Previous + " is " + Current + " replaced with " + newcomponent)
-  //            CalculatorUtil.replaceSingleComponentWithComponent(Previous, Current, newcomponent);
+  //            Utility.replaceSingleComponentWithComponent(Previous, Current, newcomponent);
   //        } else if (Current.isOperation() && Current.includesVariable(Variable)) {
   //            this.findAndReplaceVariable(Current, Current.firstfactor, Variable, ReplacingList);
   //            this.findAndReplaceVariable(Current, Current.secondfactor, Variable, ReplacingList);
@@ -220,7 +229,7 @@ export default class Basic extends Calculator {
 
   sumTermAndTerm(Augent, Addend) {
     Logcal.append("sumTermAndTerm: Augent " + Augent + " Addend " + Addend);
-    if (CalculatorUtil.areExponentsEqual(Augent, Addend) && Addend.variable === Augent.variable) {
+    if (Utility.areExponentsEqual(Augent, Addend) && Addend.variable === Augent.variable) {
       Logger.newLatex("Summing " + Augent + " and " + Addend);
       Augent.plusValue(Addend.value);
       if (Augent.getValue() === 0) {
@@ -243,9 +252,9 @@ export default class Basic extends Calculator {
     }
     var result = this[functionname](Operation.firstfactor, Operation.secondfactor);
     if (typeof result === "undefined") {
-      CalculatorUtil.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
+      Utility.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
     } else if (result === "reversed") {
-      CalculatorUtil.replaceSingleComponentWithComponent(Location, Operation, Operation.secondfactor);
+      Utility.replaceSingleComponentWithComponent(Location, Operation, Operation.secondfactor);
     } else {
       throw ("multiplication failed?");
     }
@@ -364,9 +373,9 @@ export default class Basic extends Calculator {
     // what if different variables..?
     // what if more than one variable??
     if (Multiplier.variable || Multiplicand.variable) {
-      CalculatorUtil.addTermVariables(Multiplicand, Multiplier, true);
+      Utility.addTermVariables(Multiplicand, Multiplier, true);
     }
-    //CalculatorUtil.addOrSubstractExponents(Multiplicand, Multiplier, true);
+    //Utility.addOrSubstractExponents(Multiplicand, Multiplier, true);
     //Multiplicand.variablevalue += Multiplier.variablevalue;
     //        return Multiplicand;
   };
@@ -389,7 +398,7 @@ export default class Basic extends Calculator {
       if (Operation.minussign) {
         Operation.firstfactor.switchSign();
       }
-      CalculatorUtil.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
+      Utility.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
       //            }
     } else if (Operation.firstfactor.isOperation() && Operation.secondfactor.isOperation()) {
       // only operation & operation supported one in no-fractionReducing
@@ -414,7 +423,7 @@ export default class Basic extends Calculator {
         result.push(new MathOperation(Operation.firstfactor.content[i], "/", Operation.secondfactor));
       }
       Operation.firstfactor.content = result;
-      CalculatorUtil.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
+      Utility.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
       Logcal.end("FROM making operations Location " + Location + " Operation " + Operation);
     }
   };
@@ -559,7 +568,7 @@ export default class Basic extends Calculator {
     //                Logger.newLatex("Turning division to multiplication " + Operation + " and swapping " + Operation.secondfactor);
     //                Operation.operation = "*";
     //                Operation.secondfactor.swapFactors();
-    //                CalculatorUtil.roundCanceled = true;
+    //                Utility.roundCanceled = true;
     //    //                Operation.order++;
     //                Logcal.end("FROM swapping fractions: Location " + Location + " Operation " + Operation);
     //            } else {
@@ -634,20 +643,20 @@ export default class Basic extends Calculator {
     Numerator.divideValue(Denominator.value);
     Numerator.checkSign();
     if (Numerator.variable || Denominator.variable) {
-      CalculatorUtil.subtractTermVariables(Numerator, Denominator, false);
+      Utility.subtractTermVariables(Numerator, Denominator, false);
     }
   };
 
   checkAndConvertIfExponents(Location, Operation) {
     Logcal.start("checkAndConvertIfExponents: Location " + Location + " Operation " + Operation);
     if (Operation.firstfactor.exponent && Operation.secondfactor.exponent) {
-      if (CalculatorUtil.areComponentsBasesEqual(Operation.firstfactor, Operation.secondfactor)) {
+      if (Utility.areComponentsBasesEqual(Operation.firstfactor, Operation.secondfactor)) {
         //console.log("the base is the same!");
         // maybe check if you can derive the base too?
         Logger.newLatex("Adding " + Operation.secondfactor.exponent + " to the exponent of " + Operation.firstfactor);
         var addorsubstract = Operation.operation !== "/";
-        CalculatorUtil.addOrSubstractExponents(Operation.firstfactor, Operation.secondfactor, addorsubstract);
-        CalculatorUtil.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
+        Utility.addOrSubstractExponents(Operation.firstfactor, Operation.secondfactor, addorsubstract);
+        Utility.replaceSingleComponentWithComponent(Location, Operation, Operation.firstfactor);
         Logcal.end("checkAndConvertIfExponents: Location " + Location + " Operation " + Operation + " RETURN false");
         return true;
       }
@@ -655,12 +664,14 @@ export default class Basic extends Calculator {
     // or exponent is variable?? how about that
     // !Operation.firsfactor.exponent.variable
     if (Operation.firstfactor.exponent && (!Operation.firstfactor.isTerm() || !Operation.firstfactor.variable)) {
-      CalculatorExponent.calculate(Operation, Operation.firstfactor);
+      Exponent.calculate(Operation, Operation.firstfactor);
     }
     if (Operation.secondfactor.exponent && (!Operation.secondfactor.isTerm() || !Operation.secondfactor.variable)) {
-      CalculatorExponent.calculate(Operation, Operation.secondfactor);
+      Exponent.calculate(Operation, Operation.secondfactor);
     }
     Logcal.end("FROM checkAndConvertIfExponents: Location " + Location + " Operation " + Operation + " RETURN false");
     return false;
   }
 }
+
+export default new Basic();

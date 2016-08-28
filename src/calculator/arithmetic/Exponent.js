@@ -1,18 +1,21 @@
+import Logger from "../../utility_services/Logger";
+import Logmon from "../../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+import Orderer from "../../utility_services/Orderer";
+
+import Sum from "./Sum";
+
+import Utility from "../utility/Utility";
 
 import Calculator from "../Calculator";
 
-export default class Exponent extends Calculator {
+class Exponent extends Calculator {
 
   constructor() {
     super("Exponent");
   }
 
-  this.options = {
-    reduceFractions: true,
-    "showBracketsAfterReducingIntoOneTerm": false
-  };
-
-  this.calculate = function(Location, MathObject) {
+  calculate(Location, MathObject) {
     Logcal.start("CalculatorExponent calculate: Location " + Location + " MathObject " + MathObject);
     //var locationType = Object.prototype.toString.call(Location) === "[object Array]" ? "Equation" : Location.type;
     if (MathObject.type === "Term") {
@@ -23,14 +26,14 @@ export default class Exponent extends Calculator {
       this.reduceBracketedsExponent(Location, MathObject);
     }
     Logcal.end("FROM CalculatorExponent calculate: Location " + Location + " MathObject " + MathObject);
-  };
+  }
 
-  this.reduceTermsExponent = function(Location, Term) {
+  reduceTermsExponent(Location, Term) {
     Logcal.start("reduceTermExponent: Location " + Location + " Term " + Term);
     if (Term.exponent.isTerm()) {
 
     } else if (Term.exponent.isBracketed()) {
-      CalculatorSum.sumList(Term.exponent.content);
+      Sum.sumList(Term.exponent.content);
       if (Term.exponent.content.length === 1) {
         Term.exponent = Term.exponent.content[0];
       } else if (Term.exponent.content.length === 0) {
@@ -51,14 +54,14 @@ export default class Exponent extends Calculator {
       Term.exponent = "";
     }
     Logcal.end("FROM reduceTermExponent: Location " + Location + " Term " + Term);
-  };
+  }
 
-  this.reduceBracketedsExponent = function(Location, Bracketed) {
+  reduceBracketedsExponent(Location, Bracketed) {
     Logcal.start("reduceBracketedsExponent: Location " + Location + " MathObject " + Bracketed);
     if (Bracketed.exponent.isTerm()) {
 
     } else if (Bracketed.exponent.isBracketed()) {
-      CalculatorSum.sumList(Bracketed.exponent.content);
+      Sum.sumList(Bracketed.exponent.content);
       if (Bracketed.exponent.content.length === 1) {
         Bracketed.exponent = Bracketed.exponent.content[0];
       } else if (Bracketed.exponent.content.length === 0) {
@@ -66,5 +69,7 @@ export default class Exponent extends Calculator {
       }
     }
     Logcal.end("FROM reduceBracketedsExponent: Location " + Location + " MathObject " + Bracketed);
-  };
+  }
 }
+
+export default new Exponent();

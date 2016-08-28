@@ -1,12 +1,17 @@
+import Logger from "../../utility_services/Logger";
+import Logmon from "../../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+import Orderer from "../../utility_services/Orderer";
+
 import Calculator from "../Calculator";
 
-export default class Utility extends Calculator {
+class Utility extends Calculator {
 
   constructor() {
     super("Utility");
   }
 
-  this.replaceVariableWithSomething = function (Equation) {
+  replaceVariableWithSomething(Equation) {
     var replacing = [];
     replacing.push(new MathTerm('n', 1, 0, 0));
     replacing.push(new MathTerm('n', 1, 1, 0));
@@ -14,7 +19,7 @@ export default class Utility extends Calculator {
   };
 
   // TODO
-  this.replaceVariable = function (Term, Variable, MathObjectList) {
+  replaceVariable(Term, Variable, MathObjectList) {
     Logcal.start("replaceVariable: Term " + Term + " Variable " + Variable + " MathObjectList " + MathObjectList);
     var resultlist = [];
     throw('doesnt work');
@@ -56,7 +61,7 @@ export default class Utility extends Calculator {
     return resultlist;
   }
 
-  this.findAndReplaceVariable = function (Previous, Current, Variable, ReplacingList) {
+  findAndReplaceVariable(Previous, Current, Variable, ReplacingList) {
     Logcal.append("findAndReplaceVariable: Previous " + Previous + " Current " + Current + " Variable " + Variable + " ReplacingList " + ReplacingList);
     if (Object.prototype.toString.call(Current) === '[object Array]') {
       for (var i = 0; i < Current.length; i++) {
@@ -80,7 +85,7 @@ export default class Utility extends Calculator {
     }
   }
 //
-//  this.replaceComponentVariableWithList = function (Location, Component, Variable, ReplacingList) {
+//  this.replaceComponentVariableWithList (Location, Component, Variable, ReplacingList) {
 //    Logcal.append("findAndReplaceVariable: Previous " + Location + " Current " + Component + " Variable " + Variable + " ReplacingList " + ReplacingList);
 //    if (Object.prototype.toString.call(Component) === '[object Array]') {
 //      for (var i = 0; i < Component.length; i++) {
@@ -104,7 +109,7 @@ export default class Utility extends Calculator {
 //    }
 //  }
 
-  this.replaceEquationVariableWithList = function (Equation, Variable, ReplacingList) {
+  replaceEquationVariableWithList(Equation, Variable, ReplacingList) {
     Logcal.append("replaceEquationVariableWithList: Equation " + Equation + " Variable " + Variable + " ReplacingList " + ReplacingList);
     for (var i = 0; i < Equation.leftside.length; i++) {
       this.findAndReplaceVariable(Equation.leftside, Equation.leftside[i], Variable, ReplacingList);
@@ -114,12 +119,12 @@ export default class Utility extends Calculator {
     }
   }
 
-  this.replaceExponentWithComponent = function(Location, Old, NewOne) {
+  replaceExponentWithComponent(Location, Old, NewOne) {
     Location.exponent = NewOne; // ??????
-  };
+  }
 
   // replaces single component with another component
-  this.replaceSingleComponentWithComponent = function (Location, Old, NewOne) {
+  replaceSingleComponentWithComponent(Location, Old, NewOne) {
     Logcal.append("replaceSingleComponentWithComponent: Location " + Location + " Old " + Old + " NewOne " + NewOne);
     //NewOne.exponent = Old.exponent;
     if (Object.prototype.toString.call(Location) === '[object Array]') {
@@ -160,10 +165,10 @@ export default class Utility extends Calculator {
     }
     Orderer.setOrder(Location, Old.order, NewOne);
     Orderer.unregisterComponent(Old.type, Old.id);
-  };
+  }
 
   // replaces old component with new list of components that are added invidually or as bracketed
-  this.replaceSingleComponentWithList = function (Location, Old, NewList) {
+  replaceSingleComponentWithList(Location, Old, NewList) {
     Logcal.append("replaceSingleComponentWithList: Location " + Location + " " + Old + " " + NewList);
 //    if (options["showBracketsAfterReducingIntoOneTerm"]) {
     var newbracketed = new MathBracketed(NewList);
@@ -208,7 +213,7 @@ export default class Utility extends Calculator {
     Orderer.unregisterComponent(Old.type, Old.id);
   }
 
-  this.replaceInsideListWithComponent = function (List, Old, NewOne) {
+  replaceInsideListWithComponent(List, Old, NewOne) {
     Logcal.start("replaceInsideListWithComponent: List " + List + " Old " + Old + " NewOne " + NewOne);
     for (var i = 0; i < List.length; i++) {
       if (List[i].id === Old.id) {
@@ -218,7 +223,7 @@ export default class Utility extends Calculator {
     Logcal.end("FROM replaceInsideListWithComponent: List " + List + " Old " + Old + " NewOne " + NewOne);
   }
 
-  this.replaceInsideListWithList = function (List, Old, NewList) {
+  replaceInsideListWithList(List, Old, NewList) {
     Logcal.start("replaceInsideListWithList: List " + List + " Old " + Old + " NewList " + NewList);
     for (var i = 0; i < List.length; i++) {
       if (List[i].id === Old.id) {
@@ -232,9 +237,9 @@ export default class Utility extends Calculator {
     }
     Logcal.end("FROM replaceInsideListWithList: List " + List + " Old " + Old + " NewList " + NewList);
     // throw("what is life replaceInsideListWithList");
-  };
+  }
 
-  this.arrayToLatex = function(array) {
+  arrayToLatex(array) {
     var latex = "";
     for (var i = 0; i < array.length; i++) {
       if (array[i].minussign) {
@@ -249,7 +254,7 @@ export default class Utility extends Calculator {
     return latex;
   }
   
-  this.areArraysEqual = function(First, Second) {
+  areArraysEqual(First, Second) {
     var takenFirst = [],
       takenSecond = [];
       
@@ -269,24 +274,24 @@ export default class Utility extends Calculator {
     return true;
   }
   
-  this.areComponentsBasesEqual = function(FirstC, SecondC) {
+  areComponentsBasesEqual(FirstC, SecondC) {
     if (FirstC.isTerm() && SecondC.isTerm()) {
       return FirstC.getValue() === SecondC.getValue() && FirstC.variable === SecondC.variable;
     } else {
       throw("not done yet components equal stuff");
     }
-  };
+  }
 
-  this.areExponentsEqual = function(FirstC, SecondC) {
+  areExponentsEqual(FirstC, SecondC) {
     if (!FirstC.exponent && !SecondC.exponent) {
       return true;
     } else if (FirstC.exponent && SecondC.exponent) {
       return FirstC.exponent.isEqual(SecondC.exponent);
     }
     return false;
-  };
+  }
 
-  this.convertExponentsForOperation = function(Operation) {
+  convertExponentsForOperation(Operation) {
     console.log("CONVERTING YO");
     //Logcal.start("convertExponentsForOperation: Operation " + Operation);
     if (Operation.firstfactor.exponent && Operation.firstfactor.exponent.isEqual(Operation.secondfactor.exponent)) {
@@ -298,9 +303,9 @@ export default class Utility extends Calculator {
     //} else {
     //
     }
-  };
+  }
 
-  this.addTermVariables = function(FirstC, SecondC, type) {
+  addTermVariables(FirstC, SecondC, type) {
     Logcal.start("addOrSubstractVariables: FirstC " + FirstC + " SecondC " + SecondC + " type " + type);
     // maybe here check for combos of all the different variables
     if (FirstC.variable && FirstC.variable === SecondC.variable) {
@@ -327,9 +332,9 @@ export default class Utility extends Calculator {
       throw("too many variables. help");
     }
     Logcal.end("FROM addOrSubstractVariables: FirstC " + FirstC + " SecondC " + SecondC + " type " + type);
-  };
+  }
 
-  this.subtractTermVariables = function(FirstC, SecondC, type) {
+  subtractTermVariables(FirstC, SecondC, type) {
     Logcal.start("subtractTermVariables: FirstC " + FirstC + " SecondC " + SecondC + " type " + type);
     // maybe here check for combos of all the different variables
     if (FirstC.variable && FirstC.variable === SecondC.variable) {
@@ -363,9 +368,9 @@ export default class Utility extends Calculator {
       throw("too many variables. help");
     }
     Logcal.end("FROM subtractTermVariables: FirstC " + FirstC + " SecondC " + SecondC + " type " + type);
-  };
+  }
 
-  this.addOrSubstractExponents = function(FirstC, SecondC, type) {
+  addOrSubstractExponents(FirstC, SecondC, type) {
     Logcal.start("addOrSubstractExponents: FirstC " + FirstC + " SecondC " + SecondC + " type " + type);
     if (FirstC.exponent && SecondC.exponent) {
       if (FirstC.exponent.isTerm() && SecondC.exponent.isTerm()) {
@@ -401,9 +406,9 @@ export default class Utility extends Calculator {
       // no exponents so nothing to do?
     }
     Logcal.end("FROM addOrSubstractExponents: FirstC " + FirstC + " SecondC " + SecondC + " type " + type);
-  };
+  }
 
-  this.modifyTermExponents = function(FirstC, SecondC, increase) {
+  modifyTermExponents(FirstC, SecondC, increase) {
     if (increase) {
       FirstC.exponent.plusValue(SecondC.exponent.value);
     } else {
@@ -414,15 +419,15 @@ export default class Utility extends Calculator {
       FirstC.setValue(1); // if zero exponent means the term value is zero
       // dunno will it show, maybe needs newLatex
     }
-  };
+  }
 
-  this.cloneTerm = function(Term) {
+  cloneTerm(Term) {
     var term = new MathTerm(Term.variable, Term.value, Term.exponent);
     term.order = Term.order;
     return term;
   }
 
-  this.cloneProbabilityWithoutExponent = function(Probability) {
+  cloneProbabilityWithoutExponent(Probability) {
     var newcontent = [];
     for(var index in Probability.content) {
       if (Probability.content[index].isTerm()) {
@@ -439,3 +444,5 @@ export default class Utility extends Calculator {
     return prob;
   }
 }
+
+export default new Utility();

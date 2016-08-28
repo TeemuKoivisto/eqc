@@ -1,3 +1,8 @@
+import Logger from "../utility_services/Logger";
+import Logmon from "../utility_services/Logmon";
+const Logcal = Logmon.getLogger("Logcal");
+import Orderer from "../utility_services/Orderer";
+
 import Basic from "./arithmetic/Basic";
 import Exponent from "./arithmetic/Exponent";
 import Probability from "./special/Probability";
@@ -5,9 +10,8 @@ import Probability from "./special/Probability";
 import Utility from "./utility/Utility";
 import Converter from "./utility/Converter";
 
-import Orderer from "./utility/Orderer";
+class Calculator {
 
-export default class Calculator {
   constructor() {
   }
 
@@ -40,7 +44,7 @@ export default class Calculator {
       return allterms;
     }
     return true;
-  };
+  }
 
   reduceEquation(equation) {
     Logcal.timerStart("reduceEquation");
@@ -68,7 +72,7 @@ export default class Calculator {
     //console.log("order " + JSON.stringify(CalculatorUtil.orderobj));
     Logcal.timerEnd("reduceEquation");
     return this.sumAllAndSeeIfOnlyTermsLeft(equation);
-  };
+  }
 
   // this.reduceSideUsingCalculator = function (side, Order) {
     // for (var i = 0; i < side.length; i++) {
@@ -137,3 +141,5 @@ export default class Calculator {
     // }
   }
 }
+
+export default new Calculator();
