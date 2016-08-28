@@ -119,7 +119,7 @@ class Solver {
     var solution = SolverCore.solve(latex);
     Logcal.append('solution ', solution);
     Logcal.end('FROM CalculatorSolver solveEquationUnlogged: latex ' + latex + ' RETURN solution ' + solution);
-    console.log(solution)
+    // console.log(solution)
     return solution;
   }
 

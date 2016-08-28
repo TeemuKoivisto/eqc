@@ -58,9 +58,9 @@ class Exponent extends Calculator {
 
   reduceBracketedsExponent(Location, Bracketed) {
     Logcal.start("reduceBracketedsExponent: Location " + Location + " MathObject " + Bracketed);
-    if (Bracketed.exponent.isTerm()) {
+    if (Bracketed.exponent.isType("Term")) {
 
-    } else if (Bracketed.exponent.isBracketed()) {
+    } else if (Bracketed.exponent.isType("Bracketed")) {
       Sum.sumList(Bracketed.exponent.content);
       if (Bracketed.exponent.content.length === 1) {
         Bracketed.exponent = Bracketed.exponent.content[0];

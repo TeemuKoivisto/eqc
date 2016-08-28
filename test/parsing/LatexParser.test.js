@@ -6,7 +6,7 @@ const Logger = Logmon.getLogger("Logcal");
 
 const Parser = new LatexParser();
 
-xdescribe("LatexParser", () => {
+describe("LatexParser", () => {
   describe("parseEquation(latex) should parse", () => {
     describe("(simple, single)", () => {
       it("1+1=2", () => {

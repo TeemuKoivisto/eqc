@@ -619,7 +619,7 @@ class Basic extends Calculator {
     }
     return;
     if (!this.divided && (Multiplier.isBracketed() || Multiplier.isTerm())) {
-      return this.secondfactor.divide(Multiplier);
+      return this.secondfactor.d*ivide(Multiplier);
     }
     if (this.divided && (Multiplier.isBracketed() || Multiplier.isTerm())) {
       return this.firstfactor.divide(Multiplier);

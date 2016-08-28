@@ -9,6 +9,8 @@ import Calculator from "../Calculator";
 
 import MathTerm from "../../math-components/basic/MathTerm";
 import MathOperation from "../../math-components/basic/MathOperation";
+import MathSymbol from "../../math-components/basic/MathSymbol";
+import MathProbability from "../../math-components/probability/MathProbability";
 
 class Probability extends Calculator {
 
@@ -227,10 +229,10 @@ class Probability extends Calculator {
   findAvailableConversion(Probability) {
     Logcal.start("findAvailableConversion: Probability " + Probability);
     var conversion = [];
-      
+
     if (Probability.toSymbols() !== 'term') {
       var firstterm = Probability.content[0];
-      var symbol = Probability.content[1].toString();
+      var symbol = Probability.content[1].command;
       var secondterm = Probability.content[2];
       // console.log("ega " + firstterm + " symbole on " + symbol + " ja toka " + secondterm);
       var independent = this.checkIfIndependent(firstterm.variable, secondterm.variable);
@@ -287,21 +289,21 @@ class Probability extends Calculator {
           Logger.newLatexWithFormula("Converting $" + Probability.toLatex() + "$ to $" + Utility.arrayToLatex(conversion) + "$", 'Probability: conditional (independent)', 0);
         }
       } else if (symbol === "setminus") {
-    // no difference between independent and non independent?
-    // P(A\B) = P(A and B')
-    var second = Utility.cloneTerm(secondterm);
-    if (!this.hasComplement(secondterm)) {
-      second.exponent = new MathSymbol('mathsf{c}');      
-    } else {
-      second.exponent = '';
-    }
-    var intersection = new MathProbability([firstterm, new MathSymbol('cap'), second]);
-    conversion.push(intersection);
-    Logger.newLatexWithFormula("Converting $" + Probability.toLatex() + "$ to $" + Utility.arrayToLatex(conversion) + "$", 'Probability: relative complement', 0);
+        // no difference between independent and non independent?
+        // P(A\B) = P(A and B')
+        var second = Utility.cloneTerm(secondterm);
+        if (!this.hasComplement(secondterm)) {
+          second.exponent = new MathSymbol('mathsf{c}');      
+        } else {
+          second.exponent = '';
+        }
+        var intersection = new MathProbability([firstterm, new MathSymbol('cap'), second]);
+        conversion.push(intersection);
+        Logger.newLatexWithFormula("Converting $" + Probability.toLatex() + "$ to $" + Utility.arrayToLatex(conversion) + "$", 'Probability: relative complement', 0);
       }
     } else {
       // if (Probability.content[0].exponent && (Probability.content[0].exponent.toString() === "mathsf{c}" || Probability.content[0].exponent.toString() === "'")) {
-    if (this.hasComplement(Probability.content[0])) {
+      if (this.hasComplement(Probability.content[0])) {
         // P(A^c) = 1 - P(A) >> complement of A
         conversion.push(new MathTerm('', 1, ''));
         var prob = Utility.cloneProbabilityWithoutExponent(Probability);
@@ -311,6 +313,7 @@ class Probability extends Calculator {
         Logger.newLatexWithFormula("Converting $" + Probability.toLatex() + "$ to $" + Utility.arrayToLatex(conversion) + "$", 'Probability: complement', 0);
       } else {
         // add P(A)=P(A|B)
+        console.log(Probability.toSymbols())
         throw("no available conversions for " + Probability);
       }
     }
@@ -330,7 +333,7 @@ class Probability extends Calculator {
   
   hasComplement(MathObject) {
     // return (MathObject.exponent && MathObject.length !== 0 && (MathObject.exponent.toString() === "mathsf{c}" || MathObject.exponent.toString() === "'"))
-    if (MathObject.exponent && MathObject.length !== 0 && (MathObject.exponent.toString() === "mathsf{c}" || MathObject.exponent.toString() === "'")) {
+    if (MathObject.exponent && MathObject.length !== 0 && (MathObject.exponent.command === "mathsf{c}" || MathObject.exponent.command === "'")) {
       return true;
     } else {
       return false;

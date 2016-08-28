@@ -11,6 +11,16 @@ export default class MathBinomial extends MathObject {
     this.lower = lower;
   }
 
+  setOrder(order) {
+    order++;
+    this.order = order;
+    Orderer.registerComponent(order, "Binomial");
+    this.upper.setOrder(order);
+    this.upper.setParent(this);
+    this.lower.setOrder(order);
+    this.lower.setParent(this);
+  }
+
   toLatex() {
     let latex = "\\binom{";
     if (this.upper.isType("Bracketed")) {

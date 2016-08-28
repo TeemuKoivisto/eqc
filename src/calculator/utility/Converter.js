@@ -3,9 +3,16 @@ import Logmon from "../../utility_services/Logmon";
 const Logcal = Logmon.getLogger("Logcal");
 import Orderer from "../../utility_services/Orderer";
 
+import MathOperations from "../../utility_services/MathOperations";
+
+import Basic from "../arithmetic/Basic";
 import Utility from "../utility/Utility";
 
 import Calculator from "../Calculator";
+
+import MathTerm from "../../math-components/basic/MathTerm";
+import MathOperation from "../../math-components/basic/MathOperation";
+import MathFactorial from "../../math-components/probability/MathFactorial";
 
 class Converter extends Calculator {
 
@@ -28,15 +35,15 @@ class Converter extends Calculator {
   // uses the formula n!/k!(n-k)!
   convertBinomialToFactorials(Location, Binomial) {
     Logcal.start("convertBinomialToFactorials: Location " + Location + " Binomial " + Binomial);
-    if (!Binomial.upper.isTerm()) {
+    if (!Binomial.upper.isType("Term")) {
       // use calculate or sumlist or just set brackets before binomials?
       Basic.calculate(Binomial, Binomial.upper);
     }
-    if (!Binomial.lower.isTerm()) {
+    if (!Binomial.lower.isType("Term")) {
       Basic.calculate(Binomial, Binomial.lower);
     }
     // console.log('', Binomial.parent)
-    if (Binomial.upper.isTerm() && Binomial.lower.isTerm()) {
+    if (Binomial.upper.isType("Term") && Binomial.lower.isType("Term")) {
       // var uppervalue = Binomial.upper.getValue(),
         // lowervalue = Binomial.lower.getValue();
         

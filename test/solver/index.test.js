@@ -17,7 +17,7 @@ function expectSolutionToBe(solution, result, varlength, varindex, key, solution
 
 describe("CalculatorSolver", () => {
   describe("solveEquationUnlogged(latex) should solve", () => {
-    xdescribe("(simple, single)", () => {
+    describe("(simple, single)", () => {
       it("1+1=2 (terms)", () => {
         const solution = Solver.solveEquationUnlogged("1+1=2");
         expect(solution.result).to.equal("true");
@@ -49,7 +49,7 @@ describe("CalculatorSolver", () => {
       });      
     })
 
-    xdescribe("(complex, single)", () => {
+    describe("(complex, single)", () => {
       it("equation of seconddegree constiable terms with imaginary result", () => {
         // Logger.testRun("CalculatorSolver")
         const solution = Solver.solveEquationUnlogged("5x^2+6+4x=3");
@@ -83,7 +83,7 @@ describe("CalculatorSolver", () => {
       });      
     })
 
-    xdescribe("(floating point errors)", () => {
+    describe("(floating point errors)", () => {
       it("0.3-0.1", () => {
         const solution = Solver.solveEquationUnlogged("0.3-0.1=n");
         expectSolutionToBe(solution, "true", 1, 0, "n", 1, ["0.2"]);
@@ -192,7 +192,7 @@ describe("CalculatorSolver", () => {
       });
     })
 
-    xdescribe("(simple, binomial)", () => {
+    describe("(simple, binomial)", () => {
 
       it("equation of simple stuff", () => {
         // Logger.testRun("CalculatorSolver");
@@ -242,7 +242,7 @@ describe("CalculatorSolver", () => {
       });
     });
 
-    xdescribe("(simple, factorial)", () => {
+    describe("(simple, factorial)", () => {
       
       it("equation of simple stuff", () => {
         const solution = Solver.solveEquationUnlogged("5!+\\frac{23}{3}\\cdot 4!-\\frac{2}{2!}+3^{2!}=n");
@@ -256,7 +256,7 @@ describe("CalculatorSolver", () => {
       });
     })
     
-    xdescribe("(simple, exponent)", () => {
+    describe("(simple, exponent)", () => {
       
       it("2^3, term and term", () => {
         const solution = Solver.solveEquationUnlogged("2^{3}=n");
@@ -272,8 +272,8 @@ describe("CalculatorSolver", () => {
         const solution = Solver.solveEquationUnlogged("2^{\\frac{1}{3}}=n");
         expectSolutionToBe(solution, "true", 1, 0, "n", 1, ["1.2599210498948732"]);
       });
-      
-      it("n^2, constiable and term", () => {
+      // TODO old test
+      xit("n^2, variable and term", () => {
         const solution = Solver.solveEquationUnlogged("4=n^2");
         expectSolutionToBe(solution, "true", 1, 0, "n", 1, ["8"]);
       });

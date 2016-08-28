@@ -6,6 +6,8 @@ import Orderer from "../../utility_services/Orderer";
 import Calculator from "../Calculator";
 
 import MathTerm from "../../math-components/basic/MathTerm";
+import MathBracketed from "../../math-components/basic/MathBracketed";
+import MathProbability from "../../math-components/probability/MathProbability";
 
 class Utility extends Calculator {
 
@@ -432,7 +434,7 @@ class Utility extends Calculator {
   cloneProbabilityWithoutExponent(Probability) {
     var newcontent = [];
     for(var index in Probability.content) {
-      if (Probability.content[index].isTerm()) {
+      if (Probability.content[index].isType("Term")) {
       newcontent.push(this.cloneTerm(Probability.content[index]));
       } else if (Probability.content[index].type==="Symbol") {
       newcontent.push(Probability.content[index]);

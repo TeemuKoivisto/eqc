@@ -10,11 +10,15 @@ export default class MathProbabilty extends MathObject {
     this.content = contentList;
   }
 
+  switchSign() {
+    this.minussign = !this.minussign;
+  }
+
   toSymbols() {
     var symbols = "";
     for (var i = 0; i < this.content.length; i++) {
       if (this.content[i].isType("Symbol")) {
-        symbols += this.content[i].toString() + "-";
+        symbols += this.content[i].command + "-";
       } else if (this.content[i].isType("Term")) {
         //if (this.content[i].containsComplement)
         symbols += "term-";

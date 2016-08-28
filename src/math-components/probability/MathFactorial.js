@@ -10,6 +10,19 @@ export default class MathFactorial extends MathObject {
     this.component = component;
   }
 
+  setOrder(order) {
+    order++;
+    this.order = order;
+    Orderer.registerComponent(order, "Factorial");
+    this.component.setOrder(order);
+    this.component.setParent(this);
+    // if (exponent && exponent.length !== 0) {
+    // Orderer.registerComponent(order, "Exponent");
+    // this.exponent.setOrder(order);
+    // this.exponent.setParent(this);
+    // }
+  }
+
   switchSign() {
     this.component.switchSign();
     this.minussign = !this.minussign;
