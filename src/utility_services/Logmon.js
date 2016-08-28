@@ -41,6 +41,8 @@ export class Logmon {
   }
 }
 
+import now from "performance-now";
+
 export class Logger {
   constructor(name) {
     this.name = name;
@@ -69,12 +71,12 @@ export class Logger {
   }
   timerStart(where) {
     if (this.testing) {
-      this.timer[where] = performance.now();
+      this.timer[where] = now();
     }
   }
   timerEnd(where) {
     if (this.testing) {
-      const timed = performance.now() - this.timer[where];
+      const timed = now() - this.timer[where];
       if (this.consoling) {
         console.log(this.currentIndent + where + " done in time " + timed + "ms");
       }

@@ -5,7 +5,7 @@ import Orderer from "../utility_services/Orderer";
 
 import Calculator from "../calculator/index";
 
-import Core from "./core";
+import SolverCore from "./core";
 
 class Solver {
 
@@ -14,8 +14,8 @@ class Solver {
 
   checkEquationIsSolution(latex, solution) {
     Logcal.start('CalculatorSolver checkEquationIsSolution: latex ' + latex + ' solution ' + solution);
-    var solved = Core.solveWithCombinations(latex, solution.combinations);
-    // var solution2 = Core.solve(solution.result);
+    var solved = SolverCore.solveWithCombinations(latex, solution.combinations);
+    // var solution2 = SolverCore.solve(solution.result);
     console.log('solution ', solved);
     console.log('should be ', solution)
       // console.log('solution2 ', solution2);
@@ -63,8 +63,8 @@ class Solver {
 
   // this.checkEquationIsSolution2(latex, solution) {
   // Logcal.start('CalculatorSolver solveEquationIsSolution: latex ' + latex + ' solution ' + solution);
-  // var solution1 = Core.solveWithCombinations(latex, solution.combinations);
-  // // var solution2 = Core.solve(solution.result);
+  // var solution1 = SolverCore.solveWithCombinations(latex, solution.combinations);
+  // // var solution2 = SolverCore.solve(solution.result);
   // console.log('solution ', solution1);
   // console.log('should be ', solution)
   // // console.log('solution2 ', solution2);
@@ -116,7 +116,7 @@ class Solver {
 
   solveEquationUnlogged(latex) {
     Logcal.start('CalculatorSolver solveEquationUnlogged: latex ' + latex);
-    var solution = Core.solve(latex);
+    var solution = SolverCore.solve(latex);
     Logcal.append('solution ', solution);
     Logcal.end('FROM CalculatorSolver solveEquationUnlogged: latex ' + latex + ' RETURN solution ' + solution);
     return solution;
@@ -125,7 +125,7 @@ class Solver {
   solveEquationLogged(latex) {
     Logcal.start('CalculatorSolver solveEquationLogged: latex ' + latex);
     Logcal.timerStart('CalculatorSolver solveEquationLogged');
-    var solution = Core.solve(latex);
+    var solution = SolverCore.solve(latex);
     Logcal.append('solution ', solution);
     if (solution.variables.length === 1) {
       for (var i = 0; i < solution.variables[0].solutions.length; i++) {

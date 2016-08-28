@@ -10,7 +10,7 @@ import Calculator from "../calculator/index";
 import LatexParser from "../parsing/LatexParser";
 const Parser = new LatexParser();
 
-class Core {
+class SolverCore {
 
   constructor() {
     this.possibleResults = {
@@ -339,7 +339,7 @@ class Core {
     Logcal.append("solveTermEquation: equation " + equation);
     var variables = [];
     for (var term in equation.leftside) {
-      termvars = equation.leftside[term].getVariables();
+      var termvars = equation.leftside[term].getVariables();
       // console.log('got variables', termvars)
       for (var v in termvars) {
         if (variables.indexOf(termvars[v]) === -1) {
@@ -404,4 +404,4 @@ class Core {
   }
 }
 
-export default new Core();
+export default new SolverCore();

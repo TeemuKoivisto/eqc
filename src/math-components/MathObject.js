@@ -23,6 +23,9 @@ export default class MathObject {
   containsExponent() {
     return (this.exponent && this.exponent.length !== 0);
   }
+  setParent(MathComponent) {
+    this.parent = MathComponent;
+  }
   /*
    * Below all the methods to be overridden
    */

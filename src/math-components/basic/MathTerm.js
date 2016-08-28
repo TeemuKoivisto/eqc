@@ -46,6 +46,33 @@ export default class MathTerm extends MathObject {
     }
   }
 
+  setOrder(order) {
+    // this.order = order;
+    if (this.exponent && this.exponent.length !== 0) {
+      // order++;
+      // this.order = order;
+      // Orderer.registerComponent(order, "Term");
+
+      order++;
+      Orderer.registerComponent(order, "Exponent"); // no reason to register terms unless they have exponents??
+      this.exponent.order = order;
+      this.exponent.setOrder(order);
+      this.exponent.setParent(this);
+    }
+  }
+
+  getVariables() {
+    var variables = [];
+    for (var c = 0; c < this.variable.length; c++) {
+      variables.push(this.variable.charAt(c));
+    }
+    return variables;
+  }
+
+  includesVariable(Variable) {
+    return this.variable === Variable && this.variablevalue !== 0;
+  }
+
   checkSign() {
     this.minussign = this.getValue() > 0 && this.minussign ? false : this.minussign;
     this.minussign = this.getValue() < 0 && !this.minussign ? true : this.minussign;
@@ -54,6 +81,10 @@ export default class MathTerm extends MathObject {
   switchSign() {
     this.multiplyValue(-1);
     this.checkSign();
+  }
+
+  isEmpty() {
+    return this.getValue() === 0;
   }
 
   toLatex() {
